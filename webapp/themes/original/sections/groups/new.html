@@ -1,0 +1,133 @@
+{{ define "main-id" }}main-groups{{ end }}
+{{ define "main" }}
+<style>
+.custom-combobox{
+	width: 100%;
+}
+</style>
+<script type="text/JavaScript">
+  $( function() {
+    $.widget( "custom.combobox", {
+      _create: function() {
+        this.wrapper = $( "<span>" )
+          .addClass( "custom-combobox" )
+          .insertAfter( this.element );
+ 
+        this.element.hide();
+        this._createAutocomplete();
+      },
+ 
+      _createAutocomplete: function() {
+        var selected = this.element.children( ":selected" ),
+          value = selected.val() ? selected.text() : "";
+ 
+        this.input = $( "<input>" )
+          .appendTo( this.wrapper )
+          .val( value )
+          .attr( "title", "" )
+          .addClass( "custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left" )
+          .autocomplete({
+            delay: 0,
+            minLength: 0,
+            source: this._source.bind( this )
+          })
+          .tooltip({
+            classes: {
+              "ui-tooltip": "ui-state-highlight"
+            }
+          });
+ 
+        this._on( this.input, {
+          autocompleteselect: function( event, ui ) {
+            ui.item.option.selected = true;
+            this._trigger( "select", event, {
+              item: ui.item.option
+            });
+          },
+ 
+          autocompletechange: "_removeIfInvalid"
+        });
+      },
+ 
+      _source: function( request, response ) {
+        var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
+        response( this.element.children( "option" ).map(function() {
+          var text = $( this ).text();
+          if ( this.value && ( !request.term || matcher.test(text) ) )
+            return {
+              label: text,
+              value: text,
+              option: this
+            };
+        }) );
+      },
+ 
+      _removeIfInvalid: function( event, ui ) {
+ 
+        // Selected an item, nothing to do
+        if ( ui.item ) {
+          return;
+        }
+ 
+        // Search for a match (case-insensitive)
+        var value = this.input.val(),
+          valueLowerCase = value.toLowerCase(),
+          valid = false;
+        this.element.children( "option" ).each(function() {
+          if ( $( this ).text().toLowerCase() === valueLowerCase ) {
+            this.selected = valid = true;
+            return false;
+          }
+        });
+ 
+        // Found a match, nothing to do
+        if ( valid ) {
+          return;
+        }
+ 
+        // Remove invalid value
+        this.input
+          .val( "" )
+          .attr( "title", value + " didn't match any item" )
+          .tooltip( "open" );
+        this.element.val( "" );
+        this._delay(function() {
+          this.input.tooltip( "close" ).attr( "title", "" );
+        }, 2500 );
+        this.input.autocomplete( "instance" ).term = "";
+      },
+ 
+      _destroy: function() {
+        this.wrapper.remove();
+        this.element.show();
+      }
+    });
+ 
+    $( "#city" ).combobox();
+  } );
+  </script>
+<h1>Create a group</h1>
+<form class="design-1" action="/groups/new" method="POST">
+	<p>Let's choose a group name and its primary location.</p>
+	<div class="input-group required">
+		<label for="group-name">Group Name</label>
+		<input name="group-name" type="text" placeholder="for example: Orlando's JavaScript Users" required>
+	</div>
+	<div class="input-group required">
+		<label for="city">City</label>
+		<select id="city" name="city" required>
+			    <option value="">Select one...</option>
+			{{range .Cities }}<option value="{{ .ID }}">{{ .Name }}, {{ .Admin1 }}</option>{{ end }}
+		</select>
+	</div>
+	<div class="input-group required">
+		<label for="visibility">Visibility</label>
+		<input name="visibility" type="radio" value="public" id="visibility-public" checked required>
+		<label for="visibility-public">public</label>
+		<input name="visibility" type="radio" value="private" id="visibility-private" required>
+		<label for="visibility-private">private</label>
+	</div>
+	<p class="required-warning"><span style="color:red">*</span> required field</p>
+	<input type="submit" class="btn primary" value="Create">
+</form>
+{{ end }}

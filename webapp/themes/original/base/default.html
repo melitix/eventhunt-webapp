@@ -1,0 +1,25 @@
+{{ define "base" }}<!DOCTYPE html>
+<html lang="en">
+<head>
+	{{ if eq .Environment "production" }}{{ template "google-tag" . }}{{ end }}
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no">
+	{{ template "stylesheets" . }}
+	{{ template "javascript-head" . }}
+	<link rel="stylesheet" href="/assets/vendor/jquery-3.7/jquery-ui.min.css">
+	<script src="/assets/vendor/jquery-3.7/jquery.min.js"></script>
+	<script src="/assets/vendor/jquery-3.7/jquery-ui.min.js"></script>
+
+	<title>{{ .App.Name }}</title>
+	<link rel="shortcut icon" type="image/png" href="/assets/img/favicon.png">
+</head>
+<body class="logged-{{ with .User }}in{{ else }}out{{ end }}">
+	{{ template "header" . }}
+	<main id="{{ block "main-id" . }}{{ end }}">
+	{{ template "flashes" . }}
+	{{ template "main" . }}
+	</main>
+	{{ template "footer" . }}
+	<script type="text/javascript">{{ template "javascript-footer" . }}</script>
+</body>
+</html>{{ end }}

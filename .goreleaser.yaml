@@ -1,0 +1,32 @@
+version: 2
+project_name: eventhunt-webapp
+
+builds:
+  - dir: webapp
+    goos:
+      - linux
+    goarch:
+      - amd64
+    ldflags:
+      - -s -w -X main.version={{ .Version }} -extldflags "-static"
+    env:
+      - CGO_ENABLED=0
+
+archives:
+  - format: tar.gz
+    name_template: "{{ .ProjectName }}-v{{ .Version }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}hf{{ end }}"
+    files:
+      - ./README.md
+      - ./webapp/themes
+
+dockers:
+- image_templates:
+  - "ghcr.io/eventhunt-org/webapp:v{{ .Version }}"
+  - "ghcr.io/eventhunt-org/webapp:{{ if .IsSnapshot }}staging{{ else }}v{{ .Major }}.{{ .Minor }}{{ end }}"
+  - "ghcr.io/eventhunt-org/webapp:latest"
+  extra_files:
+  - webapp/themes
+  dockerfile: goreleaser.Dockerfile
+
+checksum:
+  name_template: "{{ .ProjectName }}-v{{ .Version }}-checksums.txt"

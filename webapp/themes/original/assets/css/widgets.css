@@ -1,0 +1,143 @@
+form{
+}
+	form.standard input:user-invalid{
+		border-color: red;
+	}
+
+form.design-1{
+	margin: 0 auto;
+	width: 100%;
+	max-width: 400px;
+}
+	form.design-1 label:first-child{
+		display: block;
+		margin-top: 10px;
+		width: 100%;
+	}
+	form.design-1 .input-group.required > label:first-child::after{
+		content: " *";
+		color: red;
+	}
+
+	form.design-1 input,
+	form.design-1 select,
+	form.design-1 textarea{
+		display: block;
+		margin-bottom: 10px;
+		border: 1px solid #ABB0B2;
+		border-radius: 5px;
+		padding: 8px 0;
+		width: 100%;
+		text-indent: 2%;
+	}
+		form.design-1 input:user-invalid{
+		border-color: red;
+	}
+
+	form.design-1 input,
+	form.design-1 select{
+		height: 35px;
+	}
+
+	form.design-1 input[type="radio"]{
+		display: inline-block;
+		width: auto;
+		height: auto;
+	}
+
+	form.design-1 .input-group{
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+
+		&.attached{
+			gap: 0;
+		}
+
+		&.attached *:nth-child(2){
+			border-top-right-radius: 0;
+			border-bottom-right-radius: 0;
+			border-right: none;
+		}
+
+		&.attached *:last-child{
+			border-top-left-radius: 0;
+			border-bottom-left-radius: 0;
+		}
+
+		&.a-child .input-group{
+			flex-grow: 1;
+		}
+	}
+
+
+	form.design-1 input[type="submit"]{
+		margin: 20px auto 0 auto;
+		border: none;
+		width: 50%;
+		height: 40px;
+		cursor: pointer;
+	}
+
+	form.design-1 .required-warning{
+		margin-top: 0;
+		font-size: smaller;
+		text-align: right;
+	}
+
+form.simple-vertical{
+	display: flex;
+}
+
+.location-search{
+	background-color: var( --main-black );
+	padding: 0 10px;
+	height: 50px;
+	line-height: 50px;
+	color: white;
+}
+
+.group-card,
+.event-card{
+	border: 1px solid #DEDEDE;
+	border-radius: 4px;
+	width: 340px;
+	height: 320px;
+	overflow: clip;
+	box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+
+	.cover{
+		position: relative;
+		display: block;
+
+		span{
+			position: absolute;
+			bottom: 10px;
+			left: 10px;
+			text-shadow: 1px 1px 4px #222222;
+		}
+	}
+
+	main{
+		padding: 20px;
+
+		strong{
+			display: block;
+			font-size: 1.6rem;
+		}
+	}
+}
+
+.event-card{
+
+	.group-name{
+		display: block;
+	}
+}
+
+.card-grid{
+	display: grid;
+	grid-template-columns: repeat( auto-fit, 340px);
+	grid-template-rows: repeat( auto-fit, 320px );
+	gap: 20px;
+}

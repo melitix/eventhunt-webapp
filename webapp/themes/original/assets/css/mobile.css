@@ -1,0 +1,77 @@
+/*=== Classes ================================================================*/
+.no-mobile{
+	display: none;
+}
+
+.yes-mobile{
+	display: inline-block;
+}
+/*============================================================================*/
+
+
+@media(max-width: 600px){
+
+		.logo img{
+			width: 100px;
+		}
+
+		.logo::after{
+			top: 18px;
+			left: 108px;
+			font-size: smaller;
+		}
+
+	main h1{
+		font-size: 2.2rem;
+	}
+}
+
+
+
+/*
+ * When the navigation moves from the left to the bottom.
+ */
+@media(max-width: 500px){
+
+	body{
+		grid-template-columns: 60px auto;
+		grid-template-rows: 60px auto 60px;
+	}
+
+	body > header{
+		grid-column-start: 1;
+
+	}
+		.logo.brand{
+			margin-left: 20px;
+		}
+
+		.logo.re{
+			margin: 0;
+		}
+		.inner .logo.re{
+			filter: invert( 100% );
+		}
+
+		.logo{
+			margin-left: 5px;
+			width: auto;
+		}
+
+	body > main{
+		grid-column-start: 1;
+		padding: 10px 30px;
+	}
+		body > main > header{
+			height: 35px;
+			line-height: 35px;
+		}
+
+	body > main h1{
+		line-height: normal;
+	}
+
+	footer{
+		display: none;
+	}
+}

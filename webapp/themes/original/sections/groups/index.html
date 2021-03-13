@@ -1,0 +1,17 @@
+{{ define "main-id" }}main-groups{{ end }}
+{{ define "main" }}
+<a class="btn primary" href="/groups/my">My Groups</a>
+<a class="btn primary" href="/groups/all">All Groups</a>
+<div class="card-grid groups">
+{{ range .Groups }}
+	{{ template "group-card" . }}
+{{ else }}
+	{{ if eq .Mode "my" }}
+		<p>You don't have any groups yet.</p>
+	{{ else }}
+		<p>There aren't any groups yet.</p>
+	{{ end }}
+{{ end }}
+</div>
+<a class="btn primary" href="/groups/new">Start a group</a>
+{{ end }}

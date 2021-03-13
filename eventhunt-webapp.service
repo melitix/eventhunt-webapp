@@ -1,0 +1,14 @@
+[Unit]
+Description=EventHunt Webapp
+After=mariadb.service
+
+[Service]
+ExecStart=/usr/local/eventhunt/webapp
+Restart=on-failure
+SyslogIdentifier=eventhunt-webapp
+EnvironmentFile=-/usr/local/eventhunt/prod.env
+StandardOutput=append:/var/log/eventhunt-webapp.log
+StandardError=inherit
+
+[Install]
+WantedBy=multi-user.target

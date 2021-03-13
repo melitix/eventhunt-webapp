@@ -1,0 +1,10 @@
+# Binaries
+/webapp/eventhunt-webapp
+/webapp/webapp
+
+/dist
+
+/webapp/coverage.txt
+/webapp/unit-tests.xml
+
+.env

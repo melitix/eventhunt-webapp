@@ -1,0 +1,30 @@
+.widget.page{
+	margin: 0 auto;
+	display: flex;
+	gap: 20px;
+	border-radius: 10px;
+	background-color: #F5F5F5;
+	padding: 20px;
+	max-width: 900px;
+
+	.container{
+		border-radius: 10px;
+		background-color: white;
+		padding: 20px;
+
+		strong{
+			margin-right: 10px;
+		}
+	}
+
+	main{
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+		width: 70%;
+	}
+
+	aside{
+		width: 30%;
+	}
+}

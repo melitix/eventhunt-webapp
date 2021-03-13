@@ -1,0 +1,19 @@
+
+html{
+	font-size: 62.5%;
+}
+
+body{
+	color: var( --main-black );
+	line-height: 1.5;
+	font-family: "Poppins", sans-serif;
+	font-size: 1.8rem;
+}
+
+a{
+	text-decoration: none;
+}
+
+main h1{
+	font-size: 3.4rem;
+}
