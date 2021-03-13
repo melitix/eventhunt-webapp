@@ -1,0 +1,20 @@
+services:
+  app:
+    build: .
+    environment:
+      RAG_DB_USER: app
+      RAG_DB_PWD: AppleSucks
+      RAG_DB_HOSTNAME: db
+      RAG_DB_NAME: app
+    ports:
+      - "8200:8200"
+    depends_on:
+      - db
+  db:
+    image: "postgres:16.1"
+    restart: always
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: AppleSucks
+    ports:
+      - "8201:5432"

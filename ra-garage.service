@@ -1,0 +1,16 @@
+[Unit]
+Description=Revidian Auto Garage
+After=mariadb.service
+
+[Service]
+ExecStart=/usr/local/ra-garage/ra-garage
+Restart=on-failure
+SyslogIdentifier=ra-garage
+Environment="RAG_THEME_ROOT=/usr/local/ra-garage/"
+Environment="RAG_ENVIRONMENT=production"
+EnvironmentFile=-/usr/local/ra-garage/prod.env
+StandardOutput=append:/var/log/ra-garage.log
+StandardError=inherit
+
+[Install]
+WantedBy=multi-user.target

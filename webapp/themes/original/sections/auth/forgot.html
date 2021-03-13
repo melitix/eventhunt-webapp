@@ -1,0 +1,12 @@
+{{ define "main" }}
+<h1>Reset my Password</h1>
+<form class="standard login" action="/forgot-password" method="POST">
+	<p>Please enter your username and we'll send you a password reset email.</p>
+	<div class="input-group required">
+		<label for="username">Username</label>
+		<input id="username" name="username" type="text" autocomplete="username" required>
+	</div>
+	<p class="required-warning"><span style="color:red">*</span> required field</p>
+	<input type="submit" />
+</form>
+{{ end }}

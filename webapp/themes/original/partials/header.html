@@ -1,0 +1,38 @@
+{{ define "header" }}
+<header>
+	<a class="logo" href="/"><img src="/assets/img/logo.svg" alt="{{ .App.Name }} Logo"></a>
+	<nav>
+		<ul class="menu h nav">
+		{{ range $.MainNav }}
+			<li {{ if or .ActiveBranch .ActiveLeaf }}class="active-path"{{ end }}><a href="{{ .Path }}" title="{{ .Name }}"><i class="{{ .Icon }}"></i> {{ .Name }}</a></li>
+		{{ end }}
+		</ul>
+	</nav>
+	<div class="flex-spacer"></div>
+	<a class="btn primary" href="/events/new">Host an Event</a>
+	<nav>
+		<ul class="menu h user">
+		{{ with .User }}
+		{{ else }}
+			<li><a href="/signup">Sign up</a></li>
+			<li><a href="/login">Log in</a></li>
+		{{ end }}
+		</ul>
+		{{ with .User }}
+			<img class="circle-mask profile-img" src="{{ .AvatarURL }}" alt="User Profile Picture" aria-haspopup="menu" aria-controls="user-menu" aria-expanded="false">
+			<section id="user-menu" aria-hidden="true">
+				<header>
+					<img class="circle-mask profile-img" src="{{ .AvatarURL }}" alt="User Profile Picture" />
+				</header>
+				<span class="username">{{ $.User.Username }}</span>
+				<span class="email">{{ $.User.Email }}</span>
+				<ul class="menu v">
+					<li><a href="/invite"><i class="fa fa-envelope fa-fw"></i>&nbsp;Invite</a></li>
+					<li><a href="/settings"><i class="fa fa-cog fa-fw"></i>&nbsp;Settings</a></li>
+					<li><a href="/logout"><i class="fa fa-sign-out fa-fw"></i>&nbsp;Log out</a></li>
+				</ul>
+			</section>
+		{{ end }}
+	</nav>
+</header>
+{{ end }}

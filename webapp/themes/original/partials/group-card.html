@@ -1,0 +1,12 @@
+{{ define "group-card" }}
+<div class="group-card">
+	<a class="cover" href="/groups/{{ .ID }}">
+		<img src="/assets/img/team-placeholder.png">
+		<span class="group-name">{{ .Name }}</span>
+	</a>
+	<main>
+		<strong class="group-name">Comics 'N' Coffee</strong>
+		<a class="btn primary" href="">View</a>
+	</main>
+</div>
+{{ end }}

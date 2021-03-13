@@ -1,0 +1,19 @@
+{{ define "main" }}
+<h1>Sign up to {{ .App.Name }}</h1>
+<form class="design-1 login" action="/signup" method="POST">
+	<div class="input-group required">
+		<label for="username">Username</label>
+		<input id="username" name="username" type="text" autocomplete="username" minlength="3" maxlength="15" required>
+	</div>
+	<div class="input-group required">
+		<label for="email">Email</label>
+		<input id="email" name="email" type="email" autocomplete="email" required>
+	</div>
+	<div class="input-group required">
+		<label for="password">Password</label>
+		<input id="password" name="password" type="password" autocomplete="new-password" required>
+	</div>
+	<p class="required-warning"><span style="color:red">*</span> required field</p>
+	<input class="btn primary" type="submit" value="Sign up">
+</form>
+{{ end }}

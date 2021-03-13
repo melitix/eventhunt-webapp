@@ -1,0 +1,18 @@
+{{ define "main" }}
+<h1>Reset my Password</h1>
+<form class="standard login" action="/reset-password" method="POST">
+	<p>Please enter a new password:</p>
+	<div class="input-group required">
+		<label for="password">New Password</label>
+		<input id="password" name="password" type="password" autocomplete="new-password" />
+	</div>
+	<div class="input-group required">
+		<label for="password2">Re-type Password</label>
+		<input id="password2" name="password2" type="password" autocomplete="new-password" />
+	</div>
+	<input id="username" name="username" type="hidden" value="{{ .Username }}" />
+	<input id="token" name="token" type="hidden" value="{{ .Token }}" />
+	<p class="required-warning"><span style="color:red">*</span> required field</p>
+	<input type="submit" />
+</form>
+{{ end }}

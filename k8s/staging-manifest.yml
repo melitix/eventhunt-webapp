@@ -1,0 +1,142 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  namespace: ram
+  name: db-staging
+spec:
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.1
+  instances: 1
+  storage:
+    size: 5Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: ram
+  name: garage-webapp-staging
+  labels:
+    app: garage
+    type: webapp
+    environment: staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: garage
+      type: webapp
+      environment: staging
+  template:
+    metadata:
+      labels:
+        app: garage
+        type: webapp
+        environment: staging
+    spec:
+      imagePullSecrets:
+      - name: ghcr
+      containers:
+      - name: webapp
+        image: "ghcr.io/revidian/ram-garage:latest"
+        env:
+        - name: APP_ENVIRONMENT
+          value: "staging"
+        - name: APP_HOST
+          value: "garage.moto.staging.revidian.com"
+        - name: DB_USER
+          value: "app"
+        - name: DB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: db-staging-app
+              key: password
+        - name: DB_HOST
+          value: "db-staging-rw"
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_NAME
+          value: "app"
+        - name: EMAIL_USER
+          value: "SMTP_Injection"
+        - name: EMAIL_PASS
+          valueFrom:
+            secretKeyRef:
+              name: smtp-auth
+              key: token
+        - name: EMAIL_HOST
+          value: "smtp.sparkpostmail.com"
+        - name: AUTH_HOST
+          value: "one.staging.revidian.com"
+        - name: AUTH_PORT
+          value: "443"
+        - name: AUTH_SESSION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: auth-creds
+              key: auth-session-key
+        - name: WEATHER_KEY
+          valueFrom:
+            secretKeyRef:
+              name: weather-auth
+              key: token
+        ports:
+        - containerPort: 8200
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: ram
+  name: garage-webapp-staging
+  labels:
+    app: garage
+    type: webapp
+    environment: staging
+spec:
+  type: ClusterIP
+  selector:
+    app: garage
+    type: webapp
+    environment: staging
+  ports:
+    - protocol: TCP
+      name: http
+      port: 8200
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: ram
+  name: garage-webapp-staging
+  labels:
+    app: garage
+    type: webapp
+    environment: staging
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-production"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - garage.moto.staging.revidian.com
+    - garage.auto.staging.revidian.com
+    secretName: garage-webapp-staging-tls
+  rules:
+  - host: garage.moto.staging.revidian.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: garage-webapp-staging
+            port:
+              number: 8200
+  - host: garage.auto.staging.revidian.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: garage-webapp-staging
+            port:
+              number: 8200

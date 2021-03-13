@@ -1,0 +1,16 @@
+{{ define "main" }}
+<main class="single">
+	<div class="log">
+		<h1>The {{ .Log.Mileage }} mileage log</h1>
+		<p>Log Date: {{ .Log.LogDate }}</p>
+		<p>Description: {{ .Log.Description }}</p>
+	</div>
+	<hr />
+	<div class="actions">
+		<p>Actions:</p>
+		<ul>
+			<li><a href="/bikes/{{ .Bike.VIN }}/logs/{{ .Log.ID }}/delete">Delete log</a></li>
+		</ul>
+	</div>
+</main>
+{{ end }}

@@ -1,0 +1,28 @@
+{{ define "main-id" }}main-groups{{ end }}
+{{ define "main" }}
+<main class="single">
+	<div class="widget page group">
+		<main>
+			<h1>{{ .Group.Name }}</h1>
+			<div class="buttons">
+				<button class="btn primary">Share on FB</button>
+				<button class="btn secondary">Share on LinkedIn</button>
+				<button class="btn primary">Invite by email</button>
+				<a class="btn primary" href="/groups/{{ .Group.ID }}/join">Join group</a>
+				<button class="btn secondary">Edit</button>
+			</div>
+			<div class="container">
+				<span><strong>Website:</strong>n/a</span><br />
+				<span><strong>City:</strong>n/a</span>
+			</div>
+		</main>
+		<aside>
+			<div class="container">
+				<h2>Members</h2>
+				<ul>
+				</ul>
+			</div>
+		</aside>
+	</div>
+</main>
+{{ end }}

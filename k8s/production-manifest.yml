@@ -1,0 +1,142 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  namespace: ram
+  name: db-prod
+spec:
+  imageName: ghcr.io/cloudnative-pg/postgresql:16.1
+  instances: 3
+  storage:
+    size: 5Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: ram
+  name: garage-webapp-prod
+  labels:
+    app: garage
+    type: webapp
+    environment: production
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: garage
+      type: webapp
+      environment: production
+  template:
+    metadata:
+      labels:
+        app: garage
+        type: webapp
+        environment: production
+    spec:
+      imagePullSecrets:
+      - name: ghcr
+      containers:
+      - name: webapp
+        image: "ghcr.io/revidian/ram-garage:latest"
+        env:
+        - name: APP_ENVIRONMENT
+          value: "production"
+        - name: APP_HOST
+          value: "garage.moto.revidian.com"
+        - name: DB_USER
+          value: "app"
+        - name: DB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: db-prod-app
+              key: password
+        - name: DB_HOST
+          value: "db-prod-rw"
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_NAME
+          value: "app"
+        - name: EMAIL_USER
+          value: "SMTP_Injection"
+        - name: EMAIL_PASS
+          valueFrom:
+            secretKeyRef:
+              name: smtp-auth
+              key: token
+        - name: EMAIL_HOST
+          value: "smtp.sparkpostmail.com"
+        - name: AUTH_HOST
+          value: "one.revidian.com"
+        - name: AUTH_PORT
+          value: "443"
+        - name: AUTH_SESSION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: auth-prod-creds
+              key: auth-session-key
+        - name: WEATHER_KEY
+          valueFrom:
+            secretKeyRef:
+              name: weather-auth
+              key: token
+        ports:
+        - containerPort: 8200
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: ram
+  name: garage-webapp-prod
+  labels:
+    app: garage
+    type: webapp
+    environment: production
+spec:
+  type: ClusterIP
+  selector:
+    app: garage
+    type: webapp
+    environment: production
+  ports:
+    - protocol: TCP
+      name: http
+      port: 8200
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: ram
+  name: garage-webapp-prod
+  labels:
+    app: garage
+    type: webapp
+    environment: production
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-production"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - garage.moto.revidian.com
+    - garage.auto.revidian.com
+    secretName: garage-webapp-prod-tls
+  rules:
+  - host: garage.moto.revidian.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: garage-webapp-prod
+            port:
+              number: 8200
+  - host: garage.auto.revidian.com
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: garage-webapp-prod
+            port:
+              number: 8200

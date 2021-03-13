@@ -1,0 +1,17 @@
+{{ define "main" }}
+<h1>Invite a Friend</h1>
+<form class="design-1 invite" action="/invite" method="POST">
+	<p>Invite a friend to join {{ .App.Name }}.</p>
+	<div class="input-group clipboard-copy">
+		<input id="invite-url-field" type="text" value="{{ .App.Hostname }}" readonly>
+		<button id="invite-url-button" type="button" onclick="clipboardCopy( 'invite-url' );">copy</button>
+	</div>
+	<p>Copy the URL above and send it in an instant messenger or enter their email address below.</p>
+	<div class="input-group required">
+		<label for="email">friend's email address</label>
+		<input name="email" type="email" required>
+	</div>
+	<p class="required-warning"><span style="color:red">*</span> required field</p>
+	<input type="submit" class="btn primary" value="Send">
+</form>
+{{ end }}

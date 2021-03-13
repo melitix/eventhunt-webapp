@@ -1,0 +1,10 @@
+{{ define "main-id" }}main-events{{ end }}
+{{ define "main" }}
+<div class="card-grid events">
+{{ range .Events }}
+	{{ template "event-card" . }}
+{{ else }}
+	<p>There aren't any events locally.</p>
+{{ end }}
+</div>
+{{ end }}

@@ -1,0 +1,20 @@
+{{ define "main" }}
+<h1>Host an event for {{ .Group.Name }}</h1>
+<form class="design-1" action="/events/new" method="POST">
+	<p>First let's define the basic event information.</p>
+	<div class="input-group required">
+		<label for="event-name">Event Name</label>
+		<input name="event-name" type="text" placeholder="for example: April Workshop" required>
+	</div>
+	<div class="input-group required">
+		<label for="start-time">Start Date / Time</label>
+		<input name="start-time" type="datetime-local" required>
+	</div>
+	<div class="input-group required">
+		<label for="end-time">End Date / Time</label>
+		<input name="end-time" type="datetime-local" required>
+	</div>
+	<p class="required-warning"><span style="color:red">*</span> required field</p>
+	<input type="submit" class="btn primary" value="Create">
+</form>
+{{ end }}

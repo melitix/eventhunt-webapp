@@ -1,0 +1,34 @@
+{{ define "main-id" }}main-events{{ end }}
+{{ define "main" }}
+<main class="single">
+	<div class="widget page event">
+		<main>
+			<h1>{{ .Event.Name }}</h1>
+			<span>Hosted by <a href="/groups/{{ .Event.TheGroup.ID }}">{{ .Event.TheGroup.Name }}</a></span>
+			<div class="buttons">
+				<button class="btn primary">Share on FB</button>
+				<button class="btn secondary">Share on LinkedIn</button>
+				<button class="btn primary">Invite by email</button>
+				<a class="btn primary" href="/events/{{ .Event.ID }}/rsvp/yes">RSVP yes</a>
+				<a class="btn secondary" href="/events/{{ .Event.ID }}/rsvp/maybe">RSVP maybe</a>
+				<a class="btn tertiary" href="/events/{{ .Event.ID }}/rsvp/no">RSVP no</a>
+				<button class="btn secondary">Edit</button>
+			</div>
+			<div class="container">
+				<span><strong>Time:</strong>{{ .Event.StartTime.Format "January 2, 2006 3:04p.m." }} - {{ .Event.EndTime.Format "January 2, 2006 3:04p.m." }}</span><br />
+				<span><strong>Place:</strong>n/a</span>
+			</div>
+		</main>
+		<aside>
+			<div class="container">
+				<h2>Attendees</h2>
+				<ul>
+					{{ range .Event.RSVPs }}
+						<li>Status: {{ .Intent }} - Role: {{ .Role }}</li>
+					{{ end }}
+				</ul>
+			</div>
+		</aside>
+	</div>
+</main>
+{{ end }}
