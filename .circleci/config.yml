@@ -36,7 +36,7 @@ workflows:
                     - equal: [ "<< pipeline.git.branch >>", "trunk" ]
                     - equal: [ "<< pipeline.git.branch >>", "staging" ]
                 steps:
-                  - run: docker push --all-tags ghcr.io/eventhunt-org/eventhunt
+                  - run: docker push --all-tags ghcr.io/eventhunt-org/webapp
             - persist_to_workspace:
                 root: "."
                 paths:
