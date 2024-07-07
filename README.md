@@ -8,41 +8,17 @@ Meet up locally with like-minded people.
 
 ## Dependencies
 
-### Dev
-
-- Go 1.22
-- PostgreSQL v16.3
-- GoTestSum
-- Docker (optional)
-- Tern - (DB migrations) https://github.com/jackc/tern
-
 ### Production
 
 - PostgreSQL v16.3
 - Tern - (DB migrations) https://github.com/jackc/tern
 
 
-## Setup
-
-### Without Docker Compose
-
-```
-docker run --name=eventhunt-db -e POSTGRES_USER=app -e POSTGRES_PASSWORD=APass -e POSTGRES_DB=app -p 9001:5432 -d postgis/postgis:16-3.4
-```
-
-
-## Environment Variables
-
-Check the `example.env` file for the latest variables and default values.
-
-
 ## Running
 
-First the database needs to be started.
 Then the app can be run:
 
 ```
-docker start eventhunt-db
 cd ./webapp
 go run .
 ```
@@ -53,12 +29,12 @@ go run .
 Times stored in the database should be assumed to be UTC.
 
 
-## Setup
+## Documentation
 
-```bash
-cd ./seeder
-go run . countries --filter=US
-go run . spr --filter=US
-go run . tz --filter=US
-go run . cities --filter=US
-```
+- [**Developer Setup**](/docs/dev-setup.md)
+
+
+## License
+
+This repository is licensed under the BSD-3-Clause license.
+The license can be found [here](./LICENSE).
