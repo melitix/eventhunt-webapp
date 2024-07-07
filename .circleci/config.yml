@@ -43,18 +43,6 @@ workflows:
                   - "."
           context:
             - gh-ctx
-      - deploy:
-          name: "deploy-staging"
-          environment: "staging"
-          requires:
-            - snapshot-with-goreleaser
-          filters:
-            branches:
-              only:
-                - trunk
-                - staging
-          context:
-            - k8s-ctx
   release-wf:
     jobs:
       - gor/release:
