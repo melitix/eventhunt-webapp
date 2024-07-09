@@ -3,6 +3,8 @@ package main
 import (
 	"log/slog"
 	"net/http"
+
+	"github.com/eventhunt-org/webapp/framework"
 )
 
 /*
@@ -17,7 +19,10 @@ func (a *app) middlewareLIO(next http.Handler) http.Handler {
 			slog.Error("middleware: non-logged in user tried accessing an LIO route.")
 
 			session, _ := store.Get(r, "login")
-			session.AddFlash(":err:You must be logged in to view this page.")
+			session.AddFlash(framework.Flash{
+				framework.FlashFail,
+				"You must be logged in to view this page.",
+			})
 			err := session.Save(r, w)
 			if err != nil {
 				respondWithError(w, 502, err.Error())

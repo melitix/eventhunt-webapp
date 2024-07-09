@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/eventhunt-org/webapp/framework"
 	"github.com/eventhunt-org/webapp/webapp/db"
 
 	"github.com/gopherlibs/gpic/gpic"
@@ -79,25 +80,35 @@ func (this *app) utilVerifyEmail(w http.ResponseWriter, r *http.Request) {
 
 	tok, e, err := db.GetEmailToken(this.DB, code)
 	if err != nil {
+
 		log.Error("Error: Failed to get token.")
-		session.Values["message"] = "Error: Invalid token."
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Invalid token.",
+		})
+
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
 
 	if db.IsTokenExpired(tok) {
 
-		session.Values["message"] = "Error: Expired token."
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Expired token.",
+		})
+
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
 
 	if db.IsTokenUsed(tok) {
 
-		session.Values["message"] = "Error: This token has already been used."
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Token is no longer valid.",
+		})
+
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
@@ -106,6 +117,10 @@ func (this *app) utilVerifyEmail(w http.ResponseWriter, r *http.Request) {
 	e.Verified = true
 	e.Save()
 
+	session.AddFlash(framework.Flash{
+		framework.FlashSuccess,
+		"Email address has been verified.",
+	})
 	session.Values["message"] = "Email has been verified."
 	session.Save(r, w)
 	http.Redirect(w, r, "/", http.StatusFound)

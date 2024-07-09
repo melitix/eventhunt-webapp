@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/eventhunt-org/webapp/framework"
 	"github.com/eventhunt-org/webapp/webapp/db"
 
 	"github.com/go-chi/chi/v5"
@@ -76,35 +77,27 @@ func (a *app) GeventsEditPost(w http.ResponseWriter, r *http.Request) {
  */
 func (a *app) groupsNew(w http.ResponseWriter, r *http.Request) {
 
-	var messages []string
-
 	session, _ := store.Get(r, "login")
 
 	// middlewareLIO ensures we have a user
 	u := r.Context().Value("user").(*db.User)
 
-	if session.Values["message"] != nil && session.Values["message"].(string) != "" {
-
-		messages = append(messages, session.Values["message"].(string))
-		session.Values["message"] = ""
-		session.Save(r, w)
-	}
-
 	cities, err := db.GetCitiesByAll(a.DB)
 	if err != nil {
 
 		slog.Error("Failed to get all cities.", "err", err)
-		session.Values["message"] = "Cities list failed to load."
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Cities list failed to load.",
+		})
 
 		http.Redirect(w, r, "/groups", http.StatusFound)
 		return
 	}
 
 	renderPage(a, "groups/new.html", w, r, map[string]interface{}{
-		"Messages": messages,
-		"User":     u,
-		"Cities":   cities,
+		"User":   u,
+		"Cities": cities,
 	})
 }
 
@@ -129,8 +122,10 @@ func (a *app) groupsNewPost(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 
 		slog.Error("City ID is not valid.", "id", city)
-		session.Values["message"] = "City was invalid."
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"City was invalid.",
+		})
 
 		http.Redirect(w, r, "/groups/new", http.StatusFound)
 		return
@@ -145,9 +140,10 @@ func (a *app) groupsNewPost(w http.ResponseWriter, r *http.Request) {
 	default:
 
 		slog.Error("Visibility was invalid.", "visibility", visibility)
-
-		session.Values["message"] = "Visibility was invalid."
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Visibility was invalid.",
+		})
 
 		http.Redirect(w, r, "/groups/new", http.StatusFound)
 		return
@@ -157,9 +153,10 @@ func (a *app) groupsNewPost(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 
 		slog.Error("Failed to create group.", "err", err)
-
-		session.Values["message"] = "Failed to create group."
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Failed to create group.",
+		})
 
 		http.Redirect(w, r, "/groups/new", http.StatusFound)
 		return

@@ -1,3 +1,30 @@
+#flashes{
+
+	text-align: center;
+
+	.flash{
+		display: inline-block;
+		margin-top: 10px;
+		border-radius: 10px;
+		padding: 15px 20px;
+
+		&.type-0{ /* success */
+			background-color: green;
+		}
+
+		&.type-1{ /* info */
+			background-color: gray;
+		}
+
+		&.type-2{ /* warn */
+			background-color: yellow;
+		}
+		&.type-3{ /* fail */
+			background-color: #FF6666;
+		}
+	}
+}
+
 form{
 }
 	form.standard input:user-invalid{

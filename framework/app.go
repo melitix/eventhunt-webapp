@@ -2,6 +2,7 @@ package framework
 
 import (
 	"context"
+	"encoding/gob"
 	"fmt"
 	"log"
 	"log/slog"
@@ -91,6 +92,9 @@ func NewApp(appName, dbUser, dbPassword, dbHost string, dbPort int, dbName strin
 	for _, opt := range opts {
 		opt(a)
 	}
+
+	// register Flash so that we can use it with session
+	gob.Register(Flash{})
 
 	return a, nil
 }
