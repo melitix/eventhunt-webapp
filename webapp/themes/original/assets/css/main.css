@@ -162,17 +162,6 @@ body > main{
 	min-width: 350px;
 	max-width: 1200px;
 }
-	main #messages{
-		text-align: center;
-	}
-		main #messages span{
-			display: inline-block;
-			margin-top: 10px;
-			border-radius: 10px;
-			background-color: #FF6666;
-			padding: 15px 20px;
-		}
-
 	main > header{
 		display: flex;
 		height: 60px;

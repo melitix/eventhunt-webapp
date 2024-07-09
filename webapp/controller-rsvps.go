@@ -4,6 +4,7 @@ import (
 	"log/slog"
 	"net/http"
 
+	"github.com/eventhunt-org/webapp/framework"
 	"github.com/eventhunt-org/webapp/webapp/db"
 
 	"github.com/go-chi/chi/v5"
@@ -27,9 +28,12 @@ func (a *app) rsvpsInput(w http.ResponseWriter, r *http.Request) {
 	// check if we have an existing RSVP first
 	rsvp, err := db.GetRSVP(a.DB, e.ID, u.ID)
 	if err != nil && err != pgx.ErrNoRows {
+
 		slog.Error("Failed to check RSVP status.", "err", err)
-		session.Values["message"] = "Failed to RSVP."
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Failed to RSVP.",
+		})
 
 		http.Redirect(w, r, "/events/"+e.IDString(), http.StatusFound)
 		return
@@ -43,9 +47,12 @@ func (a *app) rsvpsInput(w http.ResponseWriter, r *http.Request) {
 	} else { // let's create a new one
 		_, err := db.NewRSVP(e.ID, u, rsvpIntent, db.RSVPAttendee)
 		if err != nil {
+
 			slog.Error("Failed to RSVP.", "err", err)
-			session.Values["message"] = "Failed to RSVP."
-			session.Save(r, w)
+			session.AddFlash(framework.Flash{
+				framework.FlashFail,
+				"Failed to RSVP.",
+			})
 		}
 	}
 

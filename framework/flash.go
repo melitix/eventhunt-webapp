@@ -6,6 +6,7 @@ type FlashType uint8
 
 const (
 	FlashSuccess FlashType = iota
+	FlashInfo
 	FlashWarn
 	FlashFail
 )

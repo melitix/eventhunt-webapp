@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/eventhunt-org/webapp/framework"
 	"github.com/eventhunt-org/webapp/webapp/db"
 )
 
@@ -13,8 +14,6 @@ import (
  */
 func (a *app) venueNew(w http.ResponseWriter, r *http.Request) {
 
-	var messages []string
-
 	session, _ := store.Get(r, "login")
 
 	// middlewareLIO ensures we have a user
@@ -22,29 +21,23 @@ func (a *app) venueNew(w http.ResponseWriter, r *http.Request) {
 	// middlewareEvent ensures we have an Event
 	e := r.Context().Value("event").(*db.Event)
 
-	if session.Values["message"] != nil && session.Values["message"].(string) != "" {
-
-		messages = append(messages, session.Values["message"].(string))
-		session.Values["message"] = ""
-		session.Save(r, w)
-	}
-
 	cities, err := db.GetCitiesByAll(a.DB)
 	if err != nil {
 
 		slog.Error("Failed to get all cities.", "err", err)
-		session.Values["message"] = "Cities list failed to load."
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Cities list failed to load.",
+		})
 
 		http.Redirect(w, r, "/events/"+e.IDString(), http.StatusFound)
 		return
 	}
 
 	renderPage(a, "venues/new.tmpl", w, r, map[string]interface{}{
-		"Messages": messages,
-		"User":     u,
-		"Event":    e,
-		"Cities":   cities,
+		"User":   u,
+		"Event":  e,
+		"Cities": cities,
 	})
 }
 
@@ -69,8 +62,10 @@ func (a *app) venueNewPost(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 
 		slog.Error("City ID is not valid.", "id", city)
-		session.Values["message"] = "City was invalid."
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"City was invalid.",
+		})
 
 		http.Redirect(w, r, "/events/"+e.IDString(), http.StatusFound)
 		return
@@ -80,8 +75,10 @@ func (a *app) venueNewPost(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 
 		slog.Error("Failed to create venue.", "err", err)
-		session.Values["message"] = "Failed to create venue."
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Failed to create venue.",
+		})
 
 		http.Redirect(w, r, "/events/"+e.IDString(), http.StatusFound)
 		return

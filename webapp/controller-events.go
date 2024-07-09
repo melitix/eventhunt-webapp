@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/eventhunt-org/webapp/framework"
 	"github.com/eventhunt-org/webapp/webapp/db"
 
 	"github.com/go-chi/chi/v5"
@@ -13,17 +14,8 @@ import (
 
 func (a *app) eventsIndex(w http.ResponseWriter, r *http.Request) {
 
-	var messages []string
-
-	user, picURL := initUser(a, r)
-	session, _ := store.Get(r, "login")
-
-	if session.Values["message"] != nil && session.Values["message"].(string) != "" {
-
-		messages = append(messages, session.Values["message"].(string))
-		session.Values["message"] = ""
-		session.Save(r, w)
-	}
+	// middlewareUser might give us a User
+	u, _ := r.Context().Value("user").(*db.User)
 
 	events, err := db.GetEvents(a.DB, 25)
 	if err != nil {
@@ -31,10 +23,8 @@ func (a *app) eventsIndex(w http.ResponseWriter, r *http.Request) {
 	}
 
 	renderPage(a, "events/index.html", w, r, map[string]interface{}{
-		"User":        user,
-		"GravatarURL": picURL,
-		"Messages":    messages,
-		"Events":      events,
+		"User":   u,
+		"Events": events,
 	})
 }
 
@@ -51,9 +41,12 @@ func (a *app) eventsSingle(w http.ResponseWriter, r *http.Request) {
 	eIDStr := chi.URLParam(r, "event-id")
 	eID, err := strconv.ParseUint(eIDStr, 10, 64)
 	if err != nil {
+
 		slog.Error("Failed to create event.", "msg", err)
-		session.Values["message"] = "Failed to create event."
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Failed to create event.",
+		})
 
 		http.Redirect(w, r, "/events", http.StatusFound)
 		return
@@ -61,9 +54,12 @@ func (a *app) eventsSingle(w http.ResponseWriter, r *http.Request) {
 
 	e, err := db.GetEventByID(a.DB, eID)
 	if err != nil {
+
 		slog.Error("Failed to retrieve event from DB.", "msg", err)
-		session.Values["message"] = "Failed to create event."
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Failed to create event.",
+		})
 
 		http.Redirect(w, r, "/events", http.StatusFound)
 		return
@@ -98,9 +94,10 @@ func (a *app) eventsNewAlias(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 
 		slog.Error("Failed to get a list of groups.", "err", err)
-
-		session.Values["message"] = "There was a problem reading your groups."
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"There was a problem loading your groups.",
+		})
 
 		http.Redirect(w, r, "/events", http.StatusFound)
 		return
@@ -109,8 +106,10 @@ func (a *app) eventsNewAlias(w http.ResponseWriter, r *http.Request) {
 
 	if len(groups) == 0 {
 
-		session.Values["message"] = "Please create a group before trying to create an event."
-		session.Save(r, w)
+		session.AddFlash(&framework.Flash{
+			framework.FlashWarn,
+			"Please create a group before trying to create an event.",
+		})
 
 		http.Redirect(w, r, "/groups/new", http.StatusFound)
 		return
@@ -153,8 +152,10 @@ func (a *app) eventsNewPost(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 
 		slog.Error("Start time is not parsable.", "start-time", r.Form.Get("start-time"))
-		session.Values["message"] = "Start time was not valid."
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Start time was not valid.",
+		})
 
 		http.Redirect(w, r, "/events/new", http.StatusFound)
 		return
@@ -164,8 +165,10 @@ func (a *app) eventsNewPost(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 
 		slog.Error("End time is not parsable.", "end-time", r.Form.Get("end-time"))
-		session.Values["message"] = "End time was not valid."
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"End time was not valid.",
+		})
 
 		http.Redirect(w, r, "/events/new", http.StatusFound)
 		return
@@ -175,8 +178,10 @@ func (a *app) eventsNewPost(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 
 		slog.Error("Failed to create event.", "msg", err)
-		session.Values["message"] = "Failed to create event."
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Failed to create event.",
+		})
 
 		http.Redirect(w, r, "/events/new", http.StatusFound)
 		return

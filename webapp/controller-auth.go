@@ -18,24 +18,7 @@ import (
  */
 func (a *app) authLogin(w http.ResponseWriter, r *http.Request) {
 
-	var messages []string
-
-	// we may or may not have a logged in user
-	u, _ := r.Context().Value("user").(*db.User)
-
-	session, _ := store.Get(r, "login")
-
-	if session.Values["message"] != nil && session.Values["message"].(string) != "" {
-
-		messages = append(messages, session.Values["message"].(string))
-		session.Values["message"] = ""
-		session.Save(r, w)
-	}
-
-	renderPage(a, "auth/login.html", w, r, map[string]interface{}{
-		"User":     u,
-		"Messages": messages,
-	})
+	renderPage(a, "auth/login.html", w, r, map[string]interface{}{})
 }
 
 /*
@@ -58,8 +41,10 @@ func (this *app) authLoginPost(w http.ResponseWriter, r *http.Request) {
 
 		log.Error(errs)
 
-		session.Values["message"] = "Error: username is required"
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Username is required.",
+		})
 
 		http.Redirect(w, r, "/login", http.StatusFound)
 		return
@@ -70,8 +55,10 @@ func (this *app) authLoginPost(w http.ResponseWriter, r *http.Request) {
 
 		log.Error(errs)
 
-		session.Values["message"] = "Error: username must be between 1 and 25 characters"
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Username must be between 1 and 25 characters.",
+		})
 
 		http.Redirect(w, r, "/login", http.StatusFound)
 		return
@@ -82,8 +69,10 @@ func (this *app) authLoginPost(w http.ResponseWriter, r *http.Request) {
 
 		log.Error(errs)
 
-		session.Values["message"] = "Error: username cannot contain special characters"
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Username cannot contain special characters.",
+		})
 
 		http.Redirect(w, r, "/login", http.StatusFound)
 		return
@@ -94,8 +83,10 @@ func (this *app) authLoginPost(w http.ResponseWriter, r *http.Request) {
 
 		log.Error(errs)
 
-		session.Values["message"] = "Error: password is required"
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Password is required.",
+		})
 
 		http.Redirect(w, r, "/login", http.StatusFound)
 		return
@@ -106,8 +97,10 @@ func (this *app) authLoginPost(w http.ResponseWriter, r *http.Request) {
 
 		log.Error(errs)
 
-		session.Values["message"] = "Error: password must be between 1 and 100 characters"
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Password must be between 1 and 100 characters.",
+		})
 
 		http.Redirect(w, r, "/login", http.StatusFound)
 		return
@@ -133,8 +126,10 @@ func (this *app) authLoginPost(w http.ResponseWriter, r *http.Request) {
 
 	log.Error(errs)
 
-	session.Values["message"] = "Error: username or password is incorrect"
-	session.Save(r, w)
+	session.AddFlash(framework.Flash{
+		framework.FlashFail,
+		"Username or password is incorrect.",
+	})
 
 	http.Redirect(w, r, "/login", http.StatusFound)
 	return
@@ -158,25 +153,7 @@ func (this *app) authLogout(w http.ResponseWriter, r *http.Request) {
  * Display /signup GET
  */
 func (this *app) authSignup(w http.ResponseWriter, r *http.Request) {
-
-	var messages []string
-
-	user, picURL := initUser(this, r)
-
-	session, _ := store.Get(r, "login")
-
-	if session.Values["message"] != nil && session.Values["message"].(string) != "" {
-
-		messages = append(messages, session.Values["message"].(string))
-		session.Values["message"] = ""
-		session.Save(r, w)
-	}
-
-	renderPage(this, "auth/signup.html", w, r, map[string]interface{}{
-		"User":        user,
-		"GravatarURL": picURL,
-		"Messages":    messages,
-	})
+	renderPage(this, "auth/signup.html", w, r, map[string]interface{}{})
 }
 
 /*
@@ -197,8 +174,10 @@ func (this *app) authSignupPost(w http.ResponseWriter, r *http.Request) {
 
 		log.Error(errs)
 
-		session.Values["message"] = "Error: username is required"
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Username is required.",
+		})
 
 		http.Redirect(w, r, "/signup", http.StatusFound)
 		return
@@ -209,8 +188,10 @@ func (this *app) authSignupPost(w http.ResponseWriter, r *http.Request) {
 
 		log.Error(errs)
 
-		session.Values["message"] = "Error: username must be between 1 and 25 characters"
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Username must be between 1 and 25 characters.",
+		})
 
 		http.Redirect(w, r, "/signup", http.StatusFound)
 		return
@@ -221,8 +202,10 @@ func (this *app) authSignupPost(w http.ResponseWriter, r *http.Request) {
 
 		log.Error(errs)
 
-		session.Values["message"] = "Error: username cannot contain special characters"
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Username cannot contain special characters.",
+		})
 
 		http.Redirect(w, r, "/signup", http.StatusFound)
 		return
@@ -233,8 +216,10 @@ func (this *app) authSignupPost(w http.ResponseWriter, r *http.Request) {
 
 		log.Error(errs)
 
-		session.Values["message"] = "Error: email address is required"
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Email address is required.",
+		})
 
 		http.Redirect(w, r, "/signup", http.StatusFound)
 		return
@@ -245,8 +230,10 @@ func (this *app) authSignupPost(w http.ResponseWriter, r *http.Request) {
 
 		log.Error(errs)
 
-		session.Values["message"] = "Error: email address must be between 1 and 100 characters"
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Email address must be between 1 and 100 characters.",
+		})
 
 		http.Redirect(w, r, "/signup", http.StatusFound)
 		return
@@ -257,8 +244,10 @@ func (this *app) authSignupPost(w http.ResponseWriter, r *http.Request) {
 
 		log.Error(errs)
 
-		session.Values["message"] = "Error: password is required"
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Password is required.",
+		})
 
 		http.Redirect(w, r, "/signup", http.StatusFound)
 		return
@@ -269,8 +258,10 @@ func (this *app) authSignupPost(w http.ResponseWriter, r *http.Request) {
 
 		log.Error(errs)
 
-		session.Values["message"] = "Error: password must be between 1 and 100 characters"
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Password must be between 1 and 100 characters.",
+		})
 
 		http.Redirect(w, r, "/signup", http.StatusFound)
 		return
@@ -278,8 +269,10 @@ func (this *app) authSignupPost(w http.ResponseWriter, r *http.Request) {
 
 	if db.IsEmailTaken(this.DB, email) {
 
-		session.Values["message"] = "Error: this email address is already in use."
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"This email address is already in use.",
+		})
 
 		http.Redirect(w, r, "/signup", http.StatusFound)
 		return
@@ -292,16 +285,21 @@ func (this *app) authSignupPost(w http.ResponseWriter, r *http.Request) {
 		if ok && mysqlErr.Number == 1062 {
 
 			if strings.Contains(err.Error(), "'username'") {
-				session.Values["message"] = "Error: username already taken."
+
 				log.Errorf("Failed signup. The username %s is already taken.", username)
+				session.AddFlash(framework.Flash{
+					framework.FlashFail,
+					"Username is already taken.",
+				})
 			}
 		} else {
 
-			session.Values["message"] = "Error: there was an error signing up."
 			log.Errorf("There was an error signing up. Message: %s", err)
+			session.AddFlash(framework.Flash{
+				framework.FlashFail,
+				"Failed to sign up.",
+			})
 		}
-
-		session.Save(r, w)
 
 		http.Redirect(w, r, "/signup", http.StatusFound)
 		return
@@ -309,9 +307,12 @@ func (this *app) authSignupPost(w http.ResponseWriter, r *http.Request) {
 
 	e, err := db.AddEmailAddress(u, email, true, false)
 	if err != nil {
+
 		slog.Error("There was an error signing up. Message: %s", err)
-		session.Values["message"] = "Error: there was an error saving the email address."
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"There was an error saving the email address.",
+		})
 
 		http.Redirect(w, r, "/signup", http.StatusFound)
 		return
@@ -320,18 +321,24 @@ func (this *app) authSignupPost(w http.ResponseWriter, r *http.Request) {
 	// send verification email
 	tok, err := db.NewUserToken(u, "email-verify")
 	if err != nil {
+
 		slog.Error("Failed to create user token. Message: %s", err)
-		session.Values["message"] = "Error: there was an error saving the email address."
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"There was an error saving the email address.",
+		})
 
 		http.Redirect(w, r, "/signup", http.StatusFound)
 		return
 	}
 
 	if err := sendEmailVerification(e.Value, tok.Token); err != nil {
+
 		slog.Error("There was an error signing up. Message: %s", err)
-		session.Values["message"] = "Error: there was an error saving the email address."
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"There was an error saving the email address.",
+		})
 
 		http.Redirect(w, r, "/signup", http.StatusFound)
 		return
@@ -355,25 +362,7 @@ func (this *app) authSignupPost(w http.ResponseWriter, r *http.Request) {
  * Display /forgot-password GET
  */
 func (this *app) authForgotPasswordGet(w http.ResponseWriter, r *http.Request) {
-
-	var messages []string
-
-	user, picURL := initUser(this, r)
-
-	session, _ := store.Get(r, "login")
-
-	if session.Values["message"] != nil && session.Values["message"].(string) != "" {
-
-		messages = append(messages, session.Values["message"].(string))
-		session.Values["message"] = ""
-		session.Save(r, w)
-	}
-
-	renderPage(this, "auth/forgot.html", w, r, map[string]interface{}{
-		"User":        user,
-		"GravatarURL": picURL,
-		"Messages":    messages,
-	})
+	renderPage(this, "auth/forgot.html", w, r, map[string]interface{}{})
 }
 
 /*
@@ -394,8 +383,10 @@ func (this *app) authForgotPasswordPost(w http.ResponseWriter, r *http.Request) 
 
 		log.Error(errs)
 
-		session.Values["message"] = "Error: username is required"
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Username is required.",
+		})
 
 		http.Redirect(w, r, "/forgot-password", http.StatusFound)
 		return
@@ -406,8 +397,10 @@ func (this *app) authForgotPasswordPost(w http.ResponseWriter, r *http.Request) 
 
 		log.Error(errs)
 
-		session.Values["message"] = "Error: username must be between 1 and 25 characters"
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Username must be between 1 and 25 characters.",
+		})
 
 		http.Redirect(w, r, "/forgot-password", http.StatusFound)
 		return
@@ -418,8 +411,10 @@ func (this *app) authForgotPasswordPost(w http.ResponseWriter, r *http.Request) 
 
 		log.Error(errs)
 
-		session.Values["message"] = "Error: username cannot contain special characters"
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Username cannot contain special characters.",
+		})
 
 		http.Redirect(w, r, "/forgot-password", http.StatusFound)
 		return
@@ -439,8 +434,10 @@ func (this *app) authForgotPasswordPost(w http.ResponseWriter, r *http.Request) 
 		}
 	}
 
-	session.Values["message"] = "If the user exists, an email was sent to reset the password."
-	session.Save(r, w)
+	session.AddFlash(framework.Flash{
+		framework.FlashInfo,
+		"If the user exists, an email was sent to reset the password.",
+	})
 
 	http.Redirect(w, r, "/forgot-password", http.StatusFound)
 	return
@@ -451,32 +448,21 @@ func (this *app) authForgotPasswordPost(w http.ResponseWriter, r *http.Request) 
  */
 func (this *app) resetPasswordGet(w http.ResponseWriter, r *http.Request) {
 
-	var messages []string
+	session, _ := store.Get(r, "login")
 
 	username := r.URL.Query().Get("username")
 	t, _ := url.QueryUnescape(r.URL.Query().Get("token"))
 
-	user, picURL := initUser(this, r)
-
 	if username == "" || t == "" {
-		messages = append(messages, "Error: Invalid request to reset a password.")
-	}
-
-	session, _ := store.Get(r, "login")
-
-	if session.Values["message"] != nil && session.Values["message"].(string) != "" {
-
-		messages = append(messages, session.Values["message"].(string))
-		session.Values["message"] = ""
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Invalid request to reset a password.",
+		})
 	}
 
 	renderPage(this, "auth/reset.html", w, r, map[string]interface{}{
-		"User":        user,
-		"GravatarURL": picURL,
-		"Messages":    messages,
-		"Username":    username,
-		"Token":       t,
+		"Username": username,
+		"Token":    t,
 	})
 }
 
@@ -501,9 +487,12 @@ func (this *app) resetPasswordPost(w http.ResponseWriter, r *http.Request) {
 
 	u, err := db.GetUserByUsername(this.DB, username)
 	if err != nil {
+
 		log.Error("Error: Failed to get user.")
-		session.Values["message"] = "Error: Failed to get user to reset password."
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Failed to get user to reset password.",
+		})
 
 		http.Redirect(w, r, "/forgot-password", http.StatusFound)
 		return
@@ -511,9 +500,12 @@ func (this *app) resetPasswordPost(w http.ResponseWriter, r *http.Request) {
 
 	t, err := db.GetTokenByValue(u, theToken)
 	if err != nil {
+
 		log.Error("Error: Failed to get token.")
-		session.Values["message"] = "Error: Invalid token."
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Invalid token.",
+		})
 
 		http.Redirect(w, r, "/forgot-password", http.StatusFound)
 		return
@@ -521,8 +513,10 @@ func (this *app) resetPasswordPost(w http.ResponseWriter, r *http.Request) {
 
 	if db.IsTokenExpired(t) {
 
-		session.Values["message"] = "Error: Expired token."
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Expired token.",
+		})
 
 		http.Redirect(w, r, "/forgot-password", http.StatusFound)
 		return
@@ -530,8 +524,10 @@ func (this *app) resetPasswordPost(w http.ResponseWriter, r *http.Request) {
 
 	if db.IsTokenUsed(t) {
 
-		session.Values["message"] = "Error: This token has already been used."
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"This token is no longer valid.",
+		})
 
 		http.Redirect(w, r, "/forgot-password", http.StatusFound)
 		return
@@ -541,8 +537,10 @@ func (this *app) resetPasswordPost(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 
 		log.Error(err)
-		session.Values["message"] = "Error: Failed to reset password."
-		session.Save(r, w)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Failed to reset password.",
+		})
 
 		http.Redirect(w, r, "/forgot-password", http.StatusFound)
 		return
@@ -551,8 +549,10 @@ func (this *app) resetPasswordPost(w http.ResponseWriter, r *http.Request) {
 	// mark token as used
 	t.Save()
 
-	session.Values["message"] = "Your password has been reset."
-	session.Save(r, w)
+	session.AddFlash(framework.Flash{
+		framework.FlashSuccess,
+		"Your password has been reset.",
+	})
 
 	http.Redirect(w, r, "/login", http.StatusFound)
 	return
