@@ -171,6 +171,31 @@ func GetEventByID(db *pgxpool.Pool, id uint64) (*Event, error) {
 }
 
 /*
+ * GetEventsByQuery returns a slice of Event from the DB based on the provided query.
+ */
+func GetEventsByQuery(db *pgxpool.Pool, q string, args any) ([]*Event, error) {
+
+	var rows pgx.Rows
+
+	if args == nil {
+
+		rows, _ = db.Query(context.Background(), q)
+	} else {
+		rows, _ = db.Query(context.Background(), q, args)
+	}
+	events, err := pgx.CollectRows(rows, pgx.RowToAddrOfStructByNameLax[Event])
+	if err != nil {
+		return nil, err
+	}
+
+	for _, e := range events {
+		e.DB = db
+	}
+
+	return events, nil
+}
+
+/*
  * The generic helper to retrieve the model by a column.
  */
 func GetEvents(db *pgxpool.Pool, limit int) ([]*Event, error) {
@@ -181,4 +206,25 @@ func GetEvents(db *pgxpool.Pool, limit int) ([]*Event, error) {
 		limit,
 	)
 	return pgx.CollectRows(rows, pgx.RowToAddrOfStructByNameLax[Event])
+}
+
+/*
+ * GetEventsByGroup returns a slice of Event.
+ */
+func GetEventsByGroup(db *pgxpool.Pool, groupID uint64, pastEvents bool, limit uint8) ([]*Event, error) {
+
+	var op string
+
+	if pastEvents {
+		op = "<"
+	} else {
+		op = ">="
+	}
+
+	q := `SELECT * FROM ` + DB_TABLE_EVENT + ` WHERE start_time ` + op + ` CURRENT_TIMESTAMP AND group_id=@id`
+	args := pgx.NamedArgs{
+		"id": groupID,
+	}
+
+	return GetEventsByQuery(db, q, args)
 }
