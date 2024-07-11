@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"net/url"
 	"strconv"
 
@@ -27,6 +28,19 @@ type Group struct {
 	WebURL      *url.URL `db:"web_url"`
 	CityID      uint64   `db:"city_id" validate:"required"`
 	IsPrivate   bool     `db:"is_private"`
+}
+
+/*
+ * PastEvents returns n number of past events.
+ */
+func (g *Group) PastEvents(count uint8) []*Event {
+
+	events, err := GetEventsByGroup(g.DB, g.ID, true, 10)
+	if err != nil {
+		slog.Error("Failed to pull past events.", "groupID", g.ID)
+	}
+
+	return events
 }
 
 /*
@@ -62,7 +76,20 @@ func (g *Group) Save() error {
 /*
  * table returns the table name used in the database.
  */
-func (e *Group) table() string { return "groups" }
+func (g *Group) table() string { return "groups" }
+
+/*
+ * UpcomingEvents returns n number of future events.
+ */
+func (g *Group) UpcomingEvents(count uint8) []*Event {
+
+	events, err := GetEventsByGroup(g.DB, g.ID, false, 10)
+	if err != nil {
+		slog.Error("Failed to pull upcoming events.", "groupID", g.ID)
+	}
+
+	return events
+}
 
 //==============================================================================
 // End of methods, start of functions
@@ -144,7 +171,6 @@ func GetGroupsByQuery(db *pgxpool.Pool, q string, args any) ([]*Group, error) {
 	}
 	groups, err := pgx.CollectRows(rows, pgx.RowToAddrOfStructByNameLax[Group])
 	if err != nil {
-
 		return nil, err
 	}
 

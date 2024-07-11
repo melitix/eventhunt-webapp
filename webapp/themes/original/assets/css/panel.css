@@ -1,4 +1,4 @@
-.widget.page{
+.widget.panel{
 	margin: 0 auto;
 	display: flex;
 	gap: 20px;
@@ -11,6 +11,10 @@
 		border-radius: 10px;
 		background-color: white;
 		padding: 20px;
+
+		h2{
+			margin-top: 0;
+		}
 
 		strong{
 			margin-right: 10px;

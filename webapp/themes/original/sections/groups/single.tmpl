@@ -1,7 +1,7 @@
 {{ define "main-id" }}main-groups{{ end }}
 {{ define "main" }}
 <main class="single">
-	<div class="widget page group">
+	<div class="widget panel group">
 		<main>
 			<h1>{{ .Group.Name }}</h1>
 			<div class="buttons">
@@ -14,6 +14,22 @@
 			<div class="container">
 				<span><strong>Website:</strong>n/a</span><br />
 				<span><strong>City:</strong>n/a</span>
+			</div>
+			<div class="container">
+				<h2>Upcoming Events</h2>
+			{{ range .Group.UpcomingEvents 10 }}
+				<div>{{ .Name }}</div>
+			{{ else }}
+				none
+			{{ end }}
+			</div>
+			<div class="container">
+				<h2>Past Events</h2>
+			{{ range .Group.PastEvents 10 }}
+				<div>{{ .Name }}</div>
+			{{ else }}
+				none
+			{{ end }}
 			</div>
 		</main>
 		<aside>
