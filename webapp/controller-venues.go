@@ -30,6 +30,7 @@ func (a *app) venueNew(w http.ResponseWriter, r *http.Request) {
 			"Cities list failed to load.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/events/"+e.IDString(), http.StatusFound)
 		return
 	}
@@ -67,6 +68,7 @@ func (a *app) venueNewPost(w http.ResponseWriter, r *http.Request) {
 			"City was invalid.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/events/"+e.IDString(), http.StatusFound)
 		return
 	}
@@ -80,6 +82,7 @@ func (a *app) venueNewPost(w http.ResponseWriter, r *http.Request) {
 			"Failed to create venue.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/events/"+e.IDString(), http.StatusFound)
 		return
 	}

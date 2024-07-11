@@ -91,6 +91,7 @@ func (a *app) groupsNew(w http.ResponseWriter, r *http.Request) {
 			"Cities list failed to load.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/groups", http.StatusFound)
 		return
 	}
@@ -127,6 +128,7 @@ func (a *app) groupsNewPost(w http.ResponseWriter, r *http.Request) {
 			"City was invalid.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/groups/new", http.StatusFound)
 		return
 	}
@@ -145,6 +147,7 @@ func (a *app) groupsNewPost(w http.ResponseWriter, r *http.Request) {
 			"Visibility was invalid.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/groups/new", http.StatusFound)
 		return
 	}
@@ -158,10 +161,12 @@ func (a *app) groupsNewPost(w http.ResponseWriter, r *http.Request) {
 			"Failed to create group.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/groups/new", http.StatusFound)
 		return
 	}
 
+	session.Save(r, w)
 	http.Redirect(w, r, "/groups", http.StatusFound)
 	return
 }

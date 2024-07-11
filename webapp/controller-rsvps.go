@@ -35,6 +35,7 @@ func (a *app) rsvpsInput(w http.ResponseWriter, r *http.Request) {
 			"Failed to RSVP.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/events/"+e.IDString(), http.StatusFound)
 		return
 	}
@@ -56,6 +57,7 @@ func (a *app) rsvpsInput(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	session.Save(r, w)
 	http.Redirect(w, r, "/events/"+e.IDString(), http.StatusFound)
 	return
 }

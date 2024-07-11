@@ -87,6 +87,7 @@ func (this *app) utilVerifyEmail(w http.ResponseWriter, r *http.Request) {
 			"Invalid token.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
@@ -98,6 +99,7 @@ func (this *app) utilVerifyEmail(w http.ResponseWriter, r *http.Request) {
 			"Expired token.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
@@ -109,6 +111,7 @@ func (this *app) utilVerifyEmail(w http.ResponseWriter, r *http.Request) {
 			"Token is no longer valid.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/", http.StatusFound)
 		return
 	}
@@ -121,7 +124,7 @@ func (this *app) utilVerifyEmail(w http.ResponseWriter, r *http.Request) {
 		framework.FlashSuccess,
 		"Email address has been verified.",
 	})
-	session.Values["message"] = "Email has been verified."
+
 	session.Save(r, w)
 	http.Redirect(w, r, "/", http.StatusFound)
 	return
