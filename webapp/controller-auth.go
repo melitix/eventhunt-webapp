@@ -46,6 +46,7 @@ func (this *app) authLoginPost(w http.ResponseWriter, r *http.Request) {
 			"Username is required.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/login", http.StatusFound)
 		return
 	}
@@ -60,6 +61,7 @@ func (this *app) authLoginPost(w http.ResponseWriter, r *http.Request) {
 			"Username must be between 1 and 25 characters.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/login", http.StatusFound)
 		return
 	}
@@ -74,6 +76,7 @@ func (this *app) authLoginPost(w http.ResponseWriter, r *http.Request) {
 			"Username cannot contain special characters.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/login", http.StatusFound)
 		return
 	}
@@ -88,6 +91,7 @@ func (this *app) authLoginPost(w http.ResponseWriter, r *http.Request) {
 			"Password is required.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/login", http.StatusFound)
 		return
 	}
@@ -102,6 +106,7 @@ func (this *app) authLoginPost(w http.ResponseWriter, r *http.Request) {
 			"Password must be between 1 and 100 characters.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/login", http.StatusFound)
 		return
 	}
@@ -131,6 +136,7 @@ func (this *app) authLoginPost(w http.ResponseWriter, r *http.Request) {
 		"Username or password is incorrect.",
 	})
 
+	session.Save(r, w)
 	http.Redirect(w, r, "/login", http.StatusFound)
 	return
 }
@@ -179,6 +185,7 @@ func (this *app) authSignupPost(w http.ResponseWriter, r *http.Request) {
 			"Username is required.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/signup", http.StatusFound)
 		return
 	}
@@ -193,6 +200,7 @@ func (this *app) authSignupPost(w http.ResponseWriter, r *http.Request) {
 			"Username must be between 1 and 25 characters.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/signup", http.StatusFound)
 		return
 	}
@@ -207,6 +215,7 @@ func (this *app) authSignupPost(w http.ResponseWriter, r *http.Request) {
 			"Username cannot contain special characters.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/signup", http.StatusFound)
 		return
 	}
@@ -221,6 +230,7 @@ func (this *app) authSignupPost(w http.ResponseWriter, r *http.Request) {
 			"Email address is required.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/signup", http.StatusFound)
 		return
 	}
@@ -235,6 +245,7 @@ func (this *app) authSignupPost(w http.ResponseWriter, r *http.Request) {
 			"Email address must be between 1 and 100 characters.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/signup", http.StatusFound)
 		return
 	}
@@ -249,6 +260,7 @@ func (this *app) authSignupPost(w http.ResponseWriter, r *http.Request) {
 			"Password is required.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/signup", http.StatusFound)
 		return
 	}
@@ -263,6 +275,7 @@ func (this *app) authSignupPost(w http.ResponseWriter, r *http.Request) {
 			"Password must be between 1 and 100 characters.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/signup", http.StatusFound)
 		return
 	}
@@ -274,6 +287,7 @@ func (this *app) authSignupPost(w http.ResponseWriter, r *http.Request) {
 			"This email address is already in use.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/signup", http.StatusFound)
 		return
 	}
@@ -301,6 +315,7 @@ func (this *app) authSignupPost(w http.ResponseWriter, r *http.Request) {
 			})
 		}
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/signup", http.StatusFound)
 		return
 	}
@@ -314,6 +329,7 @@ func (this *app) authSignupPost(w http.ResponseWriter, r *http.Request) {
 			"There was an error saving the email address.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/signup", http.StatusFound)
 		return
 	}
@@ -328,6 +344,7 @@ func (this *app) authSignupPost(w http.ResponseWriter, r *http.Request) {
 			"There was an error saving the email address.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/signup", http.StatusFound)
 		return
 	}
@@ -340,6 +357,7 @@ func (this *app) authSignupPost(w http.ResponseWriter, r *http.Request) {
 			"There was an error saving the email address.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/signup", http.StatusFound)
 		return
 	}
@@ -388,6 +406,7 @@ func (this *app) authForgotPasswordPost(w http.ResponseWriter, r *http.Request) 
 			"Username is required.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/forgot-password", http.StatusFound)
 		return
 	}
@@ -402,6 +421,7 @@ func (this *app) authForgotPasswordPost(w http.ResponseWriter, r *http.Request) 
 			"Username must be between 1 and 25 characters.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/forgot-password", http.StatusFound)
 		return
 	}
@@ -416,6 +436,7 @@ func (this *app) authForgotPasswordPost(w http.ResponseWriter, r *http.Request) 
 			"Username cannot contain special characters.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/forgot-password", http.StatusFound)
 		return
 	}
@@ -439,6 +460,7 @@ func (this *app) authForgotPasswordPost(w http.ResponseWriter, r *http.Request) 
 		"If the user exists, an email was sent to reset the password.",
 	})
 
+	session.Save(r, w)
 	http.Redirect(w, r, "/forgot-password", http.StatusFound)
 	return
 }
@@ -494,6 +516,7 @@ func (this *app) resetPasswordPost(w http.ResponseWriter, r *http.Request) {
 			"Failed to get user to reset password.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/forgot-password", http.StatusFound)
 		return
 	}
@@ -507,6 +530,7 @@ func (this *app) resetPasswordPost(w http.ResponseWriter, r *http.Request) {
 			"Invalid token.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/forgot-password", http.StatusFound)
 		return
 	}
@@ -518,6 +542,7 @@ func (this *app) resetPasswordPost(w http.ResponseWriter, r *http.Request) {
 			"Expired token.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/forgot-password", http.StatusFound)
 		return
 	}
@@ -529,6 +554,7 @@ func (this *app) resetPasswordPost(w http.ResponseWriter, r *http.Request) {
 			"This token is no longer valid.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/forgot-password", http.StatusFound)
 		return
 	}
@@ -542,6 +568,7 @@ func (this *app) resetPasswordPost(w http.ResponseWriter, r *http.Request) {
 			"Failed to reset password.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/forgot-password", http.StatusFound)
 		return
 	}
@@ -554,6 +581,7 @@ func (this *app) resetPasswordPost(w http.ResponseWriter, r *http.Request) {
 		"Your password has been reset.",
 	})
 
+	session.Save(r, w)
 	http.Redirect(w, r, "/login", http.StatusFound)
 	return
 }

@@ -1,6 +1,8 @@
 package framework
 
-import "github.com/gorilla/sessions"
+import (
+	"github.com/gorilla/sessions"
+)
 
 type FlashType uint8
 

@@ -48,6 +48,7 @@ func (a *app) eventsSingle(w http.ResponseWriter, r *http.Request) {
 			"Failed to create event.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/events", http.StatusFound)
 		return
 	}
@@ -61,6 +62,7 @@ func (a *app) eventsSingle(w http.ResponseWriter, r *http.Request) {
 			"Failed to create event.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/events", http.StatusFound)
 		return
 	}
@@ -99,6 +101,7 @@ func (a *app) eventsNewAlias(w http.ResponseWriter, r *http.Request) {
 			"There was a problem loading your groups.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/events", http.StatusFound)
 		return
 
@@ -106,15 +109,17 @@ func (a *app) eventsNewAlias(w http.ResponseWriter, r *http.Request) {
 
 	if len(groups) == 0 {
 
-		session.AddFlash(&framework.Flash{
+		session.AddFlash(framework.Flash{
 			framework.FlashWarn,
 			"Please create a group before trying to create an event.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/groups/new", http.StatusFound)
 		return
 	}
 
+	session.Save(r, w)
 	http.Redirect(w, r, "/groups/"+groups[0].IDString()+"/schedule", http.StatusFound)
 	return
 }
@@ -157,6 +162,7 @@ func (a *app) eventsNewPost(w http.ResponseWriter, r *http.Request) {
 			"Start time was not valid.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/events/new", http.StatusFound)
 		return
 	}
@@ -170,6 +176,7 @@ func (a *app) eventsNewPost(w http.ResponseWriter, r *http.Request) {
 			"End time was not valid.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/events/new", http.StatusFound)
 		return
 	}
@@ -183,10 +190,12 @@ func (a *app) eventsNewPost(w http.ResponseWriter, r *http.Request) {
 			"Failed to create event.",
 		})
 
+		session.Save(r, w)
 		http.Redirect(w, r, "/events/new", http.StatusFound)
 		return
 	}
 
+	session.Save(r, w)
 	http.Redirect(w, r, "/events/"+e.IDString()+"/new-venue", http.StatusFound)
 	return
 }
