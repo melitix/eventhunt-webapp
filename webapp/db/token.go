@@ -17,7 +17,7 @@ import (
 )
 
 type token struct {
-	*framework.BaseModel
+	framework.BaseModel
 	userID     uint      `json:"user_id"`
 	Token      string    `json:"token"`
 	tokenHash  string    `json:"tokenHash"`
