@@ -70,6 +70,7 @@ func (a *app) initializeRoutes() {
 				r.Use(a.middlewareGroup)
 				r.Get("/", a.groupsSingle)
 				r.Get("/{:new|schedule}", a.eventsNew)
+				r.With(a.middlewareLIO).Get("/join", a.groupsJoin)
 			})
 		})
 
