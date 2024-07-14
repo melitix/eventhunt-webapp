@@ -170,3 +170,56 @@ func (a *app) groupsNewPost(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/groups", http.StatusFound)
 	return
 }
+
+/*
+ * Handles joining a Group as a member.
+ *
+ * Path: /groups/join
+ */
+func (a *app) groupsJoin(w http.ResponseWriter, r *http.Request) {
+
+	session, _ := store.Get(r, "login")
+
+	// middlewareLIO ensures we have a User
+	u := r.Context().Value("user").(*db.User)
+	// middlewareGroup ensures we have a Group
+	g := r.Context().Value("group").(*db.Group)
+
+	// can't join a group we're already in
+	if g.IsMember(u.ID) {
+
+		session.AddFlash(framework.Flash{
+			framework.FlashWarn,
+			"Can't join a group you're already in.",
+		})
+
+		session.Save(r, w)
+		http.Redirect(w, r, "/groups/"+g.IDString(), http.StatusFound)
+		return
+	}
+
+	// We're clear to join
+	_, err := db.NewMembership(g.ID, u, db.MemberMember)
+	if err != nil {
+
+		slog.Error("Failed to create membership.", "err", err)
+
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Failed to join group.",
+		})
+
+		session.Save(r, w)
+		http.Redirect(w, r, "/groups/"+g.IDString(), http.StatusFound)
+		return
+	}
+
+	session.AddFlash(framework.Flash{
+		framework.FlashSuccess,
+		"You're now a member of " + g.Name,
+	})
+
+	session.Save(r, w)
+	http.Redirect(w, r, "/groups/"+g.IDString(), http.StatusFound)
+	return
+}

@@ -8,7 +8,7 @@
 				<button class="btn primary">Share on FB</button>
 				<button class="btn secondary">Share on LinkedIn</button>
 				<button class="btn primary">Invite by email</button>
-				<a class="btn primary" href="/groups/{{ .Group.ID }}/join">Join group</a>
+				{{ if (.Group.IsMember .User.ID) }}{{ else }}<a class="btn primary" href="/groups/{{ .Group.ID }}/join">Join group</a>{{ end }}
 				<button class="btn secondary">Edit</button>
 			</div>
 			<div class="container">

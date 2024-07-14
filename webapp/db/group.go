@@ -31,6 +31,22 @@ type Group struct {
 }
 
 /*
+ * IsMember returns true if the provided ID (User) is a member of this Group.
+ */
+func (g *Group) IsMember(id uint64) bool {
+
+	memberships := g.Memberships()
+
+	for _, ms := range memberships {
+		if ms.TheUser.ID == id {
+			return true
+		}
+	}
+
+	return false
+}
+
+/*
  * Members returns a slice of User who belong to the Group..
  */
 func (g *Group) Memberships() []*Membership {
