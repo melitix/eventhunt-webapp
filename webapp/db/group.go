@@ -31,6 +31,19 @@ type Group struct {
 }
 
 /*
+ * Members returns a slice of User who belong to the Group..
+ */
+func (g *Group) Memberships() []*Membership {
+
+	memberships, err := GetMembershipsByGroup(g.DB, g.ID)
+	if err != nil {
+		slog.Error("Failed to get members for group.", "groupID", g.ID, "err", err)
+	}
+
+	return memberships
+}
+
+/*
  * PastEvents returns n number of past events.
  */
 func (g *Group) PastEvents(count uint8) []*Event {
@@ -151,6 +164,13 @@ func NewGroup(u *User, name string, cityID uint64, isPrivate bool) (*Group, erro
 	g, err = pgx.CollectExactlyOneRow(rows, pgx.RowToAddrOfStructByName[Group])
 	if err != nil {
 		return nil, fmt.Errorf("Failed to create group. Err: %s", err)
+	}
+
+	// Now that we have a Group, let's add the User who created it as its first
+	// member. The User's role will be 'owner'.
+	_, err = NewMembership(g.ID, u, MemberOwner)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to create group membership. Err: %s", err)
 	}
 
 	return g, nil

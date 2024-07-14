@@ -29,6 +29,7 @@ type Membership struct {
 	framework.BaseModel
 	GroupID uint64     `db:"group_id" validate:"required"`
 	UserID  uint64     `db:"user_id" validate:"required"`
+	TheUser *User      `db:"-"`
 	Role    MemberRole `db:"role"`
 }
 
@@ -133,7 +134,13 @@ func GetMembershipsByQuery(db *pgxpool.Pool, q string, args any) ([]*Membership,
 	}
 
 	for _, ms := range memberships {
+
 		ms.DB = db
+
+		ms.TheUser, err = GetUserByID(db, ms.UserID)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return memberships, nil
