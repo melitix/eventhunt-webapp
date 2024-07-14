@@ -1,10 +1,12 @@
 #flashes{
-
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	padding: 15px 0;
 	text-align: center;
 
 	.flash{
 		display: inline-block;
-		margin-top: 10px;
 		border-radius: 10px;
 		padding: 15px 20px;
 
