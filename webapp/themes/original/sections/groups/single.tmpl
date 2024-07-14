@@ -36,6 +36,9 @@
 			<div class="container">
 				<h2>Members</h2>
 				<ul>
+					{{ range .Group.Memberships }}
+						<li>{{ .TheUser.Username }}</li>
+					{{ end }}
 				</ul>
 			</div>
 		</aside>
