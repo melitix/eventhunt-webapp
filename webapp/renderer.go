@@ -2,12 +2,12 @@ package main
 
 import (
 	"html/template"
+	"log/slog"
 	"math"
 	"net/http"
 
 	"github.com/eventhunt-org/webapp/framework"
 
-	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 )
 
@@ -52,7 +52,13 @@ func renderPage(a *app, tplHTML string, w http.ResponseWriter, r *http.Request, 
 	)
 
 	if err != nil {
-		log.Fatal("Theme files are missing.")
+		slog.Error("Theme files are missing.")
+	}
+
+	// this lets us clear the flashes from the session
+	err = session.Save(r, w)
+	if err != nil {
+		slog.Error("Failed to save session on render.")
 	}
 
 	tpl.ExecuteTemplate(w, "base", tplData)
