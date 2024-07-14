@@ -111,6 +111,19 @@ CREATE TABLE app.groups (
 	updated_time	timestamp		NOT NULL	DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TYPE membership_role AS ENUM ('member', 'cohost', 'host', 'owner');
+
+CREATE TABLE app.memberships (
+	id				BIGSERIAL			NOT NULL,
+	group_id		BIGINT				references app.groups(id),
+	user_id			BIGINT				references app.users(id),
+	role			membership_role		NOT NULL,
+	created_time	timestamp			NOT NULL	DEFAULT CURRENT_TIMESTAMP,
+	updated_time	timestamp			NOT NULL	DEFAULT CURRENT_TIMESTAMP,
+
+	CONSTRAINT memberships_pk PRIMARY KEY (group_id, user_id)
+);
+
 CREATE TABLE app.venues (
 	id				BIGSERIAL			PRIMARY KEY,
 	name			varchar(80)			NOT NULL,
