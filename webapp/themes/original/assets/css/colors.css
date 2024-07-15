@@ -1,9 +1,10 @@
 :root{
+	--eventhunt-blue:	#74C0FC;
+	--eventhunt-purple:	#8F89FA;
+
 	--main-black: #292B2C;
 	--accent-color: #0d86ff;
 	--grey: #777777;
-
-	--eventhunt-blue: #74C0FC;
 
 	--primary-color: var( --eventhunt-blue );
 }

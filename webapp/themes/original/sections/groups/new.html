@@ -120,6 +120,10 @@
 			{{range .Cities }}<option value="{{ .ID }}">{{ .Name }}, {{ .Admin1 }}</option>{{ end }}
 		</select>
 	</div>
+	<div class="input-group">
+		<label for="group-summary">Summary <i class="fa-xs fa-solid fa-circle-question tooltip" data-fa-transform="up-6" title="A brief description of your group."></i></label>
+		<textarea name="group-summary"></textarea>
+	</div>
 	<div class="input-group required">
 		<label for="visibility">Visibility</label>
 		<input name="visibility" type="radio" value="public" id="visibility-public" checked required>
