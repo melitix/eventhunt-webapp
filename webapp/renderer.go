@@ -5,6 +5,7 @@ import (
 	"log/slog"
 	"math"
 	"net/http"
+	"net/url"
 
 	"github.com/eventhunt-org/webapp/framework"
 
@@ -32,6 +33,12 @@ func renderPage(a *app, tplHTML string, w http.ResponseWriter, r *http.Request, 
 	tplData["Request"] = map[string]string{}
 	tplData["Version"] = a.Version
 	tplData["Flashes"] = flashes
+	tplData["URL"] = map[string]string{
+		"Hostname":    r.Host,
+		"Path":        r.URL.String(),
+		"Full":        r.Host + r.URL.String(),
+		"FullEscaped": url.QueryEscape(r.Host + r.URL.String()),
+	}
 
 	mainNav.PreRender(r.URL)
 
