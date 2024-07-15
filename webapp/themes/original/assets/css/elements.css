@@ -5,14 +5,43 @@
 	font-size: 1.6rem;
 	font-weight: bold;
 	cursor: pointer;
-}
-	.btn.primary{
+
+	&.primary{
 		background-color: var( --primary-color );
 		color: var( --on-primary-color );
-	}
-		.btn.primary:hover{
+
+		&:hover{
 			background-color: color-mix( in oklab, white 20%, var( --primary-color ));
 		}
+	}
+
+	&:has( > .fa-envelope ){
+		background-color: #FF6600;
+		color: white;
+
+		&:hover{
+			background-color: color-mix( in oklab, white 20%, #FF6600);
+		}
+	}
+
+	&:has( > .fa-facebook ){
+		background-color: #3B5998;
+		color: white;
+
+		&:hover{
+			background-color: color-mix( in oklab, white 20%, #3B5998);
+		}
+	}
+
+	&:has( > .fa-linkedin ){
+		background-color: #0077B5;
+		color: white;
+
+		&:hover{
+			background-color: color-mix( in oklab, white 20%, #0077B5);
+		}
+	}
+}
 
 form{
 }
