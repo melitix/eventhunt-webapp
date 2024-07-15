@@ -38,6 +38,7 @@ type RSVP struct {
 	framework.BaseModel
 	EventID      uint64      `db:"event_id" validate:"required"`
 	UserID       uint64      `db:"user_id" validate:"required"`
+	TheUser      *User       `db:"-"`
 	Intent       RSVPStatus  `db:"intent" validate:"required"`
 	Actual       *RSVPStatus `db:"actual"`
 	Role         RSVPRole    `db:"role"`
@@ -156,5 +157,20 @@ func GetRSVPsByEvent(db *pgxpool.Pool, eventID uint64) ([]*RSVP, error) {
 		"eventID": eventID,
 	})
 
-	return pgx.CollectRows(rows, pgx.RowToAddrOfStructByName[RSVP])
+	rsvps, err := pgx.CollectRows(rows, pgx.RowToAddrOfStructByName[RSVP])
+	if err != nil {
+		return nil, err
+	}
+
+	for _, aRSVP := range rsvps {
+
+		aRSVP.DB = db
+
+		aRSVP.TheUser, err = GetUserByID(db, aRSVP.UserID)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return rsvps, nil
 }

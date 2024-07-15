@@ -15,6 +15,22 @@
 		}
 	}
 
+	&.positive{
+		background-color: var( --eventhunt-green );
+
+		&:hover{
+			background-color: color-mix( in oklab, white 20%, var( --eventhunt-green ));
+		}
+	}
+
+	&.negative{
+		background-color: var( --eventhunt-red );
+
+		&:hover{
+			background-color: color-mix( in oklab, white 20%, var( --eventhunt-red ));
+		}
+	}
+
 	&:has( > .fa-envelope ){
 		background-color: #FF6600;
 		color: white;
