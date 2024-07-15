@@ -28,10 +28,10 @@ body{
 body > header{
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
 	background-color: var( --main-black );
 	padding: 0 10px;
 	height: 50px;
-	line-height: 50px;
 
 	.logo{
 		position: relative;
@@ -47,7 +47,7 @@ body > header{
 
 
 		body > header nav .profile-img{
-			margin: 10px 10px 0 0;
+			margin-left: 10px;
 			border: 1px solid black;
 			width: 40px;
 			height: 40px;
