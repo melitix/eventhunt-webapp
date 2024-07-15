@@ -22,7 +22,7 @@ type Group struct {
 	framework.BaseModel
 	UserID      uint64   `db:"user_id"`
 	Name        string   `db:"name" validate:"required,min=3,max=20"`
-	Summary     string   `db:"summary"`
+	Summary     string   `db:"summary" validate:"required,min=3,max=200"`
 	Description string   `db:"description"`
 	Slug        string   `db:"slug"`
 	WebURL      *url.URL `db:"web_url"`
@@ -156,11 +156,12 @@ func initGroup(db *pgxpool.Pool) *Group {
  * NewGroup creates a new Group struct, validates it, and if good, saves itr to
  * the database.
  */
-func NewGroup(u *User, name string, cityID uint64, isPrivate bool) (*Group, error) {
+func NewGroup(u *User, name string, cityID uint64, summary string, isPrivate bool) (*Group, error) {
 
 	g := initGroup(u.DB)
 	g.Name = name
 	g.CityID = cityID
+	g.Summary = summary
 	g.IsPrivate = isPrivate
 
 	err := validate.Struct(g)
@@ -170,11 +171,12 @@ func NewGroup(u *User, name string, cityID uint64, isPrivate bool) (*Group, erro
 
 	q := `INSERT INTO ` + g.table() + ` 
 		(user_id, name, summary, description, slug, city_id, is_private) 
-		VALUES (@userID, @name, '', '', '', @cityID, @isPrivate) RETURNING *`
+		VALUES (@userID, @name, @summary, '', '', @cityID, @isPrivate) RETURNING *`
 	rows, _ := u.DB.Query(context.Background(), q, pgx.NamedArgs{
 		"userID":    u.ID,
 		"name":      g.Name,
 		"cityID":    g.CityID,
+		"summary":   g.Summary,
 		"isPrivate": g.IsPrivate,
 	})
 	g, err = pgx.CollectExactlyOneRow(rows, pgx.RowToAddrOfStructByName[Group])

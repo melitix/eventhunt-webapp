@@ -1,3 +1,4 @@
+@import url( "classes.css" );
 @import url( "font.css" );
 @import url( "elements.css" );
 @import url( "widgets.css" );
@@ -385,43 +386,6 @@ form.standard{
 	form.standard a{
 		color: white;
 	}
-
-.tooltip{
-	position: relative;
-	font-size: smaller;
-}
-	.tooltip::before{
-		display: none;
-		position: absolute;
-		top: 50%;
-		transform: translateY(-50%);
-		left: 100%;
-		margin-left: 15px;
-		border-radius: 8px;
-		background-color: black;
-		padding: 10px;
-		width: 200px;
-		color: white;
-		content: attr(data-text);
-		text-align: center;
-	}
-	
-	.tooltip::after{
-		display: none;
-		position: absolute;
-		left: 100%;
-		top: 50%;
-		transform: translateY(-50%);
-		margin-left: -5px;
-		border: 10px solid black;
-		border-color: transparent black transparent transparent;
-		content: "";
-	}
-		.tooltip:hover:before,
-		.tooltip:hover:after{
-			display: block;
-		}
-
 /*=== End Elements ===========================================================*/
 
 
