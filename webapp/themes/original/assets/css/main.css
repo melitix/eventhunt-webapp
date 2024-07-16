@@ -72,7 +72,7 @@ body > header{
 		#user-menu header{
 			position: relative;
 			margin-bottom: 40px;
-				background-color: var( --ram-red );
+			background-color: var( --primary-color );
 			height: 70px;
 		}
 
