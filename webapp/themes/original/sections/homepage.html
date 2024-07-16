@@ -46,7 +46,7 @@ initMap();
 <div class="card-grid events">
 	<h2>Nearby Events</h2>
 {{ range .Events }}
-	{{ template "event-card" . }}
+	{{ template "gt-card" . }}
 {{ else }}
 	<p>There aren't any events locally.</p>
 {{ end }}
@@ -54,7 +54,7 @@ initMap();
 <div class="card-grid groups">
 	<h2>Nearby Groups</h2>
 {{ range .Groups }}
-	{{ template "group-card" . }}
+	{{ template "gt-card" . }}
 {{ else }}
 	<p>There aren't any groups locally.</p>
 {{ end }}
