@@ -38,5 +38,40 @@
 
 	aside{
 		width: 30%;
+		min-width: 300px;
+	}
+
+	.rsvps{
+		display: flex;
+		flex-direction: column;
+		gap: 15px;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+
+		.rsvp{
+			img{
+				width: 36px;
+			}
+
+			.intent{
+				border-radius: 16px;
+				padding: 4px 8px;
+				color: white;
+				font-size: smaller;
+
+				&.yes{
+					background-color: var( --eventhunt-green );
+				}
+
+				&.maybe{
+					background-color: var( --eventhunt-blue );
+				}
+
+				&.no{
+					background-color: var( --eventhunt-red );
+				}
+			}
+		}
 	}
 }

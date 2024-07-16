@@ -9,9 +9,10 @@
 				<a class="btn" href="https://www.facebook.com/sharer/sharer.php?u={{ .URL.FullEscaped }}&display=popup" title="Post to Facebook" target="_blank"><i class="fa-brands fa-facebook"></i> Post</a>
 				<a class="btn" href="https://www.linkedin.com/shareArticle?url={{ .URL.FullEscaped }}&title={{ .Event.Name }}&mini=true&source=EventHunt" title="Share on LinkedIn" target="_blank"><i class="fa-brands fa-linkedin"></i> Share</a>
 				<a class="btn" href="mailto:?subject=Read%20This%20Article:%20{{ .Event.Name }}&body=Check%20this%20out%20from%20EventHunt:%20{{ .URL.FullEscaped }}" title="Share via email" target="_blank"><i class="fa-solid fa-envelope"></i> Email</a>
-				<a class="btn primary" href="/events/{{ .Event.ID }}/rsvp/yes">RSVP yes</a>
-				<a class="btn secondary" href="/events/{{ .Event.ID }}/rsvp/maybe">RSVP maybe</a>
-				<a class="btn tertiary" href="/events/{{ .Event.ID }}/rsvp/no">RSVP no</a>
+				<span>RSVP:</span>
+				<a class="btn positive" href="/events/{{ .Event.ID }}/rsvp/yes">yes</a>
+				<a class="btn primary" href="/events/{{ .Event.ID }}/rsvp/maybe">maybe</a>
+				<a class="btn negative" href="/events/{{ .Event.ID }}/rsvp/no">no</a>
 				<button class="btn secondary">Edit</button>
 			</div>
 			<div class="container">
@@ -22,10 +23,14 @@
 		<aside>
 			<div class="container">
 				<h2>Attendees</h2>
-				<ul>
-					{{ range .Event.RSVPs }}
-						<li>Status: {{ .Intent }} - Role: {{ .Role }}</li>
-					{{ end }}
+				<ul class="rsvps">
+				{{ range .Event.RSVPs }}
+					<li class="rsvp">
+						<img src="{{ .TheUser.AvatarURL }}">
+						<span class="username">{{ .TheUser.Username }}</span>
+						<span class="intent {{ .Intent}}">{{ .Intent }}</span>
+					</li>
+				{{ end }}
 				</ul>
 			</div>
 		</aside>
