@@ -6,6 +6,7 @@ import (
 	"math"
 	"net/http"
 	"net/url"
+	"reflect"
 
 	"github.com/eventhunt-org/webapp/framework"
 
@@ -49,9 +50,13 @@ func renderPage(a *app, tplHTML string, w http.ResponseWriter, r *http.Request, 
 		"roundInt": func(a float64) int {
 			return int(math.Round(a))
 		},
+		"typeOf": func(t any) string {
+			return reflect.TypeOf(t).Elem().Name()
+		},
 	}
 
 	tpl := template.Must(template.New("theme").Funcs(funcMap).ParseGlob(a.ThemePath() + "partials/*.html"))
+	tpl, _ = tpl.ParseGlob(a.ThemePath() + "partials/*.tmpl")
 	tpl, _ = tpl.ParseGlob(a.ThemePath() + "partials/*.js")
 	tpl, err := tpl.ParseFiles(
 		a.ThemePath()+"sections/"+tplHTML,

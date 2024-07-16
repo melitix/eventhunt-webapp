@@ -2,7 +2,7 @@
 {{ define "main" }}
 <div class="card-grid events">
 {{ range .Events }}
-	{{ template "event-card" . }}
+	{{ template "gt-card" . }}
 {{ else }}
 	<p>There aren't any events locally.</p>
 {{ end }}

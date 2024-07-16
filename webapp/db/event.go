@@ -189,7 +189,13 @@ func GetEventsByQuery(db *pgxpool.Pool, q string, args any) ([]*Event, error) {
 	}
 
 	for _, e := range events {
+
 		e.DB = db
+
+		e.TheGroup, err = GetGroupByID(db, e.GroupID)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return events, nil
@@ -200,12 +206,12 @@ func GetEventsByQuery(db *pgxpool.Pool, q string, args any) ([]*Event, error) {
  */
 func GetEvents(db *pgxpool.Pool, limit int) ([]*Event, error) {
 
-	q := `SELECT * FROM ` + DB_TABLE_EVENT + ` LIMIT $1`
+	q := `SELECT * FROM ` + DB_TABLE_EVENT + ` LIMIT @limit`
+	args := pgx.NamedArgs{
+		"limit": limit,
+	}
 
-	rows, _ := db.Query(context.Background(), q,
-		limit,
-	)
-	return pgx.CollectRows(rows, pgx.RowToAddrOfStructByNameLax[Event])
+	return GetEventsByQuery(db, q, args)
 }
 
 /*

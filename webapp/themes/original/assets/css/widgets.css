@@ -126,8 +126,7 @@ form.simple-vertical{
 	color: white;
 }
 
-.group-card,
-.event-card{
+.gt-card{
 	border: 1px solid #DEDEDE;
 	border-radius: 4px;
 	width: 340px;
@@ -138,6 +137,7 @@ form.simple-vertical{
 	.cover{
 		position: relative;
 		display: block;
+		color: white;
 
 		span{
 			position: absolute;
@@ -147,12 +147,19 @@ form.simple-vertical{
 		}
 	}
 
-	main{
+	.body{
 		padding: 20px;
 
 		strong{
 			display: block;
 			font-size: 1.6rem;
+		}
+
+		div{
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			height: 60px;
 		}
 	}
 }

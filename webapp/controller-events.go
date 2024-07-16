@@ -22,7 +22,7 @@ func (a *app) eventsIndex(w http.ResponseWriter, r *http.Request) {
 		slog.Error("Failed to get a list of events.", "err", err)
 	}
 
-	renderPage(a, "events/index.html", w, r, map[string]interface{}{
+	renderPage(a, "events/index.tmpl", w, r, map[string]interface{}{
 		"User":   u,
 		"Events": events,
 	})

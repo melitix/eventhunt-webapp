@@ -1,0 +1,21 @@
+{{- /* gt-card is named after GetTogether card. A UI card based on the GetTogether design. */ -}}
+{{ define "gt-card" }}
+{{ $type := typeOf . }}
+<div class="gt-card {{ if eq $type "Event" }}event{{ else }}group{{ end }}">
+	<a class="cover" href="/{{ if eq $type "Event" }}events{{ else }}groups{{ end }}/{{ .ID }}">
+		<img src="/assets/img/team-placeholder.png">
+		<span class="name">{{ .Name }}</span>
+	</a>
+	<div class="body">
+		<strong>{{ if eq $type "Event" }}{{ .TheGroup.Name }}{{ else }}{{ .CityID }}{{ end }}</strong>
+		<div>
+		{{ if eq $type "Event" }}
+			<span class="start-time">{{ .StartTime.Format "January 2, 2006" }}</span>
+		{{ else }}
+			<span>{{ len .Memberships }} members</span>
+		{{ end }}
+			<a class="btn primary" href="/{{ if eq $type "Event" }}events{{ else }}groups{{ end }}/{{ .ID }}">View</a>
+		</div>
+	</div>
+</div>
+{{ end }}
