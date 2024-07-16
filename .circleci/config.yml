@@ -78,6 +78,16 @@ workflows:
               only: /^v\d+\.\d+\.\d+$/
           context:
             - k8s-ctx
+  weekly-wf:
+    triggers:
+    - schedule:
+        cron: "0 13 * * 1"
+        filters:
+          branches:
+            only:
+            - trunk
+    jobs:
+    - scc
 
 jobs:
   build:
@@ -246,7 +256,7 @@ jobs:
       - checkout
       - run:
           name: "Install scc"
-          command: curl -sSL "https://github.com/boyter/scc/releases/download/v3.3.5/scc_3.3.5_Linux_x86_64.tar.gz" | sudo tar -xz -C /usr/local/bin scc
+          command: curl -sSL "https://github.com/boyter/scc/releases/download/v3.3.5/scc_Linux_x86_64.tar.gz" | sudo tar -xz -C /usr/local/bin scc
       - run:
           name: "Run scc"
           command: scc .
