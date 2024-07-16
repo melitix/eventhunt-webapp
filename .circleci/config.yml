@@ -1,20 +1,20 @@
 variables:
-  grv: &goreleaser-version "2.0.1"
+  grv: &goreleaser-version "2.1.0"
   gv: &go-version "1.22.5"
 
 version: 2.1
 
 orbs:
   browser-tools: circleci/browser-tools@1.4
-  cc: codecov/codecov@3.2
-  go: circleci/go@1.9
+  cc: codecov/codecov@4.1
+  go: circleci/go@1.11
   gor: hubci/goreleaser@2.5
   k8s: circleci/kubernetes@1.3
 
 executors:
   linux:
     machine:
-      image: ubuntu-2204:2024.04.1
+      image: ubuntu-2204:2024.07.1
 
 workflows:
   main-wf:
@@ -155,7 +155,7 @@ jobs:
       - attach_workspace:
           at: .
       - go/install:
-          version: "1.22.4"
+          version: "1.22.5"
       - run:
           name: "Install Dependencies"
           command: |
@@ -203,7 +203,7 @@ jobs:
           at: .
       - k8s/install-kubeconfig
       - k8s/install-kubectl:
-          kubectl-version: "v1.29.2"
+          kubectl-version: "v1.30.2"
       - run:
           name: "Deploy"
           command: |
@@ -246,7 +246,7 @@ jobs:
       - checkout
       - run:
           name: "Install scc"
-          command: curl -sSL "https://github.com/boyter/scc/releases/download/v3.1.0/scc_3.1.0_Linux_x86_64.tar.gz" | sudo tar -xz -C /usr/local/bin scc
+          command: curl -sSL "https://github.com/boyter/scc/releases/download/v3.3.5/scc_3.3.5_Linux_x86_64.tar.gz" | sudo tar -xz -C /usr/local/bin scc
       - run:
           name: "Run scc"
           command: scc .
