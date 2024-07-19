@@ -22,7 +22,7 @@ import (
 // currently handled by the initUser function running active()
 type User struct {
 	framework.BaseModel
-	Username   string    `db:"username"`
+	Username   string    `db:"username" validate:"min=3,max=15"`
 	Password   string    `db:"password"`
 	FirstName  string    `db:"first_name"`
 	LastName   string    `db:"last_name"`
