@@ -9,7 +9,7 @@ CREATE EXTENSION IF NOT EXISTS postgis SCHEMA app;
 
 CREATE TABLE app.users (
 	id				BIGSERIAL		PRIMARY KEY,
-	username		varchar(15)		NOT NULL,
+	username		CITEXT			NOT NULL UNIQUE,
 	password		varchar(100)	NOT NULL,
 	first_name		varchar(50)		NOT NULL,
 	last_name		varchar(50)		NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE app.users (
 CREATE TABLE app.email_addresses (
 	id				BIGSERIAL	PRIMARY KEY,
 	user_id			INTEGER		references app.users(id),
-	the_value		app.citext	NOT NULL,
+	the_value		app.citext	NOT NULL UNIQUE,
 	preferred		boolean		NOT NULL,
 	verified		boolean		NOT NULL	DEFAULT false,
 	created_time	timestamp	NOT NULL	DEFAULT CURRENT_TIMESTAMP,
@@ -102,7 +102,7 @@ CREATE TABLE app.groups (
 	user_id			INTEGER			NOT NULL references app.users(id),
 	name			varchar(80)		NOT NULL,
 	summary			varchar(255)	NOT NULL,
-	description		varchar(7000)	NOT NULL,
+	description		TEXT			NOT NULL,
 	slug			varchar(50)		NOT NULL,
 	web_url			varchar(1000),
 	city_id			INTEGER			NOT NULL references app.cities(id),
@@ -142,7 +142,7 @@ CREATE TABLE app.events (
 	start_time		timestamp		NOT NULL,
 	end_time		timestamp		NOT NULL,
 	summary			varchar(255)	NOT NULL DEFAULT '',
-	description		varchar(7000)	NOT NULL DEFAULT '',
+	description		TEXT			NOT NULL DEFAULT '',
 	web_url			varchar(1000)	NOT NULL DEFAULT '',
 	announce_url	varchar(1000)	NOT NULL DEFAULT '',
 	attendee_limit	INTEGER			NOT NULL DEFAULT 0,
