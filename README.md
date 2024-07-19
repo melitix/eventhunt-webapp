@@ -1,7 +1,6 @@
-# EventHunt
-[![CI Status](https://dl.circleci.com/status-badge/img/gh/eventhunt-org/webapp/tree/trunk.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/eventhunt-badge/webapp/tree/trunk)
-[![Codecov](https://codecov.io/gh/eventhunt-badge/webapp/graph/badge.svg)](https://codecov.io/gh/eventhunt-badge/webapp)
-[![Software License](https://img.shields.io/badge/license-BSD3-blue.svg)](https://raw.githubusercontent.com/eventhunt-org/webapp/trunk/LICENSE)
+![Banner](./img/banner.png)
+
+# :round_pushpin::penguin: EventHunt &nbsp; - &nbsp; [![CI Status](https://dl.circleci.com/status-badge/img/gh/eventhunt-org/webapp/tree/trunk.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/eventhunt-badge/webapp/tree/trunk) [![Codecov](https://codecov.io/gh/eventhunt-badge/webapp/graph/badge.svg)](https://codecov.io/gh/eventhunt-badge/webapp) [![Software License](https://img.shields.io/badge/license-BSD3-blue.svg)](https://raw.githubusercontent.com/eventhunt-org/webapp/trunk/LICENSE)
 
 Meet up locally with like-minded people.
 
