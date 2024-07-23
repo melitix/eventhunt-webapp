@@ -118,7 +118,6 @@ func (a *app) groupsNewPost(w http.ResponseWriter, r *http.Request) {
 	name := r.Form.Get("group-name")
 	city := r.Form.Get("city")
 	summary := r.Form.Get("group-summary")
-	visibility := r.Form.Get("visibility")
 
 	cityID, err := strconv.ParseUint(city, 10, 64)
 	if err != nil {
@@ -134,24 +133,7 @@ func (a *app) groupsNewPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var isPrivate bool
-	switch visibility {
-	case "public":
-		isPrivate = false
-	case "private":
-		isPrivate = true
-	default:
-
-		slog.Error("Visibility was invalid.", "visibility", visibility)
-		session.AddFlash(framework.Flash{
-			framework.FlashFail,
-			"Visibility was invalid.",
-		})
-
-		session.Save(r, w)
-		http.Redirect(w, r, "/groups/new", http.StatusFound)
-		return
-	}
+	isPrivate := false
 
 	_, err = db.NewGroup(u, name, cityID, summary, isPrivate)
 	if err != nil {
