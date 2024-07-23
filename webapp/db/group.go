@@ -21,8 +21,8 @@ const DB_TABLE_GROUP = "groups"
 type Group struct {
 	framework.BaseModel
 	UserID      uint64   `db:"user_id"`
-	Name        string   `db:"name" validate:"required,min=3,max=20"`
-	Summary     string   `db:"summary" validate:"required,min=3,max=200"`
+	Name        string   `db:"name" validate:"required,min=3,max=30"`
+	Summary     string   `db:"summary" validate:"min=3,max=200"`
 	Description string   `db:"description"`
 	Slug        string   `db:"slug"`
 	WebURL      *url.URL `db:"web_url"`
