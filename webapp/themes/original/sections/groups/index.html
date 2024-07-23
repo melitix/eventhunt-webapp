@@ -4,7 +4,7 @@
 <a class="btn primary" href="/groups/all">All Groups</a>
 <div class="card-grid groups">
 {{ range .Groups }}
-	{{ template "group-card" . }}
+	{{ template "gt-card" . }}
 {{ else }}
 	{{ if eq .Mode "my" }}
 		<p>You don't have any groups yet.</p>
