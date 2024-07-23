@@ -22,7 +22,7 @@ type Group struct {
 	framework.BaseModel
 	UserID      uint64   `db:"user_id"`
 	Name        string   `db:"name" validate:"required,min=3,max=30"`
-	Summary     string   `db:"summary" validate:"min=3,max=200"`
+	Summary     string   `db:"summary" validate:"omitempty,min=3,max=200"`
 	Description string   `db:"description"`
 	Slug        string   `db:"slug"`
 	WebURL      *url.URL `db:"web_url"`
