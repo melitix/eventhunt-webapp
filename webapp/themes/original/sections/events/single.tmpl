@@ -13,7 +13,6 @@
 				<a class="btn positive" href="/events/{{ .Event.ID }}/rsvp/yes">yes</a>
 				<a class="btn primary" href="/events/{{ .Event.ID }}/rsvp/maybe">maybe</a>
 				<a class="btn negative" href="/events/{{ .Event.ID }}/rsvp/no">no</a>
-				<button class="btn secondary">Edit</button>
 			</div>
 			<div class="container">
 				<span><strong>Time:</strong>{{ .Event.StartTime.Format "January 2, 2006 3:04p.m." }} - {{ .Event.EndTime.Format "January 2, 2006 3:04p.m." }}</span><br />
