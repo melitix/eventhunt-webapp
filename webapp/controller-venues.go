@@ -36,7 +36,7 @@ func (a *app) venueNew(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	renderPage(a, "venues/new.tmpl", w, r, map[string]interface{}{
+	renderPage(a, "venues/new", w, r, map[string]interface{}{
 		"User":   u,
 		"Event":  e,
 		"Cities": cities,

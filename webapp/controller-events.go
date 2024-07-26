@@ -22,7 +22,7 @@ func (a *app) eventsIndex(w http.ResponseWriter, r *http.Request) {
 		slog.Error("Failed to get a list of events.", "err", err)
 	}
 
-	renderPage(a, "events/index.tmpl", w, r, map[string]interface{}{
+	renderPage(a, "events/index", w, r, map[string]interface{}{
 		"User":   u,
 		"Events": events,
 	})
@@ -67,7 +67,7 @@ func (a *app) eventsSingle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	renderPage(a, "events/single.tmpl", w, r, map[string]interface{}{
+	renderPage(a, "events/single", w, r, map[string]interface{}{
 		"User":  u,
 		"Event": e,
 	})
@@ -134,7 +134,7 @@ func (a *app) eventsNew(w http.ResponseWriter, r *http.Request) {
 	// middlewareGroup ensures we have a Group
 	g := r.Context().Value("group").(*db.Group)
 
-	renderPage(a, "events/new.tmpl", w, r, map[string]interface{}{
+	renderPage(a, "events/new", w, r, map[string]interface{}{
 		"User":  u,
 		"Group": g,
 	})
