@@ -59,7 +59,7 @@ func (this *app) util404Get(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusNotFound)
 
-	renderPage(this, "util/404.html", w, r, map[string]interface{}{
+	renderPage(this, "util/404", w, r, map[string]interface{}{
 		"User":        user,
 		"GravatarURL": picURL,
 	})

@@ -40,7 +40,7 @@ func (a *app) groupsIndex(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	renderPage(a, "groups/index.html", w, r, map[string]interface{}{
+	renderPage(a, "groups/index", w, r, map[string]interface{}{
 		"User":   u,
 		"Groups": groups,
 		"Mode":   mode,
@@ -57,7 +57,7 @@ func (a *app) groupsSingle(w http.ResponseWriter, r *http.Request) {
 	// middlewareGroup ensures we have a Group
 	g := r.Context().Value("group").(*db.Group)
 
-	renderPage(a, "groups/single.tmpl", w, r, map[string]interface{}{
+	renderPage(a, "groups/single", w, r, map[string]interface{}{
 		"User":  u,
 		"Group": g,
 	})
@@ -96,7 +96,7 @@ func (a *app) groupsNew(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	renderPage(a, "groups/new.html", w, r, map[string]interface{}{
+	renderPage(a, "groups/new", w, r, map[string]interface{}{
 		"User":   u,
 		"Cities": cities,
 	})

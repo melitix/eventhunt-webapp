@@ -29,7 +29,7 @@ func (a *app) homepage(w http.ResponseWriter, r *http.Request) {
 		slog.Error(err.Error())
 	}
 
-	renderPage(a, "homepage.html", w, r, map[string]interface{}{
+	renderPage(a, "homepage", w, r, map[string]interface{}{
 		"User":   u,
 		"MapKey": mapKey,
 		"Events": events,

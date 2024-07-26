@@ -18,7 +18,7 @@ import (
  */
 func (a *app) authLogin(w http.ResponseWriter, r *http.Request) {
 
-	renderPage(a, "auth/login.html", w, r, map[string]interface{}{})
+	renderPage(a, "auth/login", w, r, map[string]interface{}{})
 }
 
 /*
@@ -159,7 +159,7 @@ func (this *app) authLogout(w http.ResponseWriter, r *http.Request) {
  * Display /signup GET
  */
 func (this *app) authSignup(w http.ResponseWriter, r *http.Request) {
-	renderPage(this, "auth/signup.html", w, r, map[string]interface{}{})
+	renderPage(this, "auth/signup", w, r, map[string]interface{}{})
 }
 
 /*
@@ -380,7 +380,7 @@ func (this *app) authSignupPost(w http.ResponseWriter, r *http.Request) {
  * Display /forgot-password GET
  */
 func (this *app) authForgotPasswordGet(w http.ResponseWriter, r *http.Request) {
-	renderPage(this, "auth/forgot.html", w, r, map[string]interface{}{})
+	renderPage(this, "auth/forgot", w, r, map[string]interface{}{})
 }
 
 /*
@@ -482,7 +482,7 @@ func (this *app) resetPasswordGet(w http.ResponseWriter, r *http.Request) {
 		})
 	}
 
-	renderPage(this, "auth/reset.html", w, r, map[string]interface{}{
+	renderPage(this, "auth/reset", w, r, map[string]interface{}{
 		"Username": username,
 		"Token":    t,
 	})

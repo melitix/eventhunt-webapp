@@ -13,7 +13,7 @@ func (this *app) otherInviteGet(w http.ResponseWriter, r *http.Request) {
 
 	user, picURL := initUser(this, r)
 
-	renderPage(this, "other/invite.html", w, r, map[string]interface{}{
+	renderPage(this, "other/invite", w, r, map[string]interface{}{
 		"User":        user,
 		"GravatarURL": picURL,
 	})
