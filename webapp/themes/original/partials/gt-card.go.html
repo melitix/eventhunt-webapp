@@ -7,7 +7,7 @@
 		<span class="name">{{ .Name }}</span>
 	</a>
 	<div class="body">
-		<strong>{{ if eq $type "Event" }}{{ .TheGroup.Name }}{{ else }}{{ .CityID }}{{ end }}</strong>
+		<strong>{{ if eq $type "Event" }}{{ .TheGroup.Name }}{{ else }}{{ .TheCity.String }}{{ end }}</strong>
 		<div>
 		{{ if eq $type "Event" }}
 			<span class="start-time">{{ .StartTime.Format "January 2, 2006" }}</span>

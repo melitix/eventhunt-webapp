@@ -29,6 +29,13 @@ type City struct {
  */
 func (city *City) primaryKey() string { return "id" }
 
+/*
+ * String returns the city, state string representation of the strut.
+ */
+func (c *City) String() string {
+	return c.Name + ", " + c.Admin1
+}
+
 //==============================================================================
 // End of methods, start of functions
 //==============================================================================

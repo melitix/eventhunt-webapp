@@ -208,9 +208,10 @@ body > header nav a:active{
 
 
 /* Homepage */
-#main-homepage a{
-	color: white;
-	font-weight: bold;
+#main-homepage{
+	h1 i{
+		color: var( --primary-color );
+	}
 }
 /*=== End Pages ==============================================================*/
 
