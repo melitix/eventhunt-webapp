@@ -16,7 +16,7 @@
 			</div>
 			<div class="container">
 				<span><strong>Time:</strong>{{ .Event.StartTime.Format "January 2, 2006 3:04p.m." }} - {{ .Event.EndTime.Format "January 2, 2006 3:04p.m." }}</span><br />
-				<span><strong>Place:</strong>n/a</span>
+				<span><strong>Place:</strong>{{ with .Event.Venue }}{{ .String }}{{ else }}<a href="{{ .Event.LocationURL }}">{{ .Event.LocationURL }}</a>{{ end }}</span>
 			</div>
 		</main>
 		<aside>

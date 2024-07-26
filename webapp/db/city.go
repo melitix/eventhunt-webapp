@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"fmt"
+	"strconv"
 
 	"github.com/eventhunt-org/webapp/framework"
 
@@ -40,17 +41,31 @@ func GetCitiesBy(db *pgxpool.Pool, q string, args ...any) ([]City, error) {
 	var rows pgx.Rows
 
 	if args == nil {
-
 		rows, _ = db.Query(context.Background(), q)
 	} else {
 		rows, _ = db.Query(context.Background(), q, args)
 	}
+
 	cities, err := pgx.CollectRows(rows, pgx.RowToStructByNameLax[City])
 	if err != nil {
 		return nil, fmt.Errorf("Failed to get city list from DB. Err: %s", err)
 	}
 
 	return cities, nil
+}
+
+func GetCityByID(db *pgxpool.Pool, id uint64) (*City, error) {
+
+	q := `SELECT id,admin1,name FROM ` + DB_TABLE_CITY + ` WHERE id=` + strconv.FormatUint(id, 10)
+
+	cities, err := GetCitiesBy(db, q)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to get city list from DB. Err: %s", err)
+	}
+
+	city := cities[0]
+
+	return &city, nil
 }
 
 func GetCitiesByAll(db *pgxpool.Pool) ([]City, error) {
