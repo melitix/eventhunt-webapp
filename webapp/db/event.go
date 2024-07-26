@@ -164,6 +164,16 @@ func getEventBy(db *pgxpool.Pool, column, value string) (*Event, error) {
 	}
 	e.TheGroup = g
 
+	// Try loading venue only if we have an ID
+	if e.VenueID != nil && *e.VenueID != uint64(0) {
+
+		e.Venue, err = GetVenueByID(db, *e.VenueID)
+		if err != nil {
+			return nil, err
+		}
+		e.Venue.DB = e.DB
+	}
+
 	return e, nil
 }
 

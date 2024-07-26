@@ -3,7 +3,8 @@ package db
 import (
 	"context"
 	"fmt"
-	"net/url"
+	"log/slog"
+	"strconv"
 
 	"github.com/eventhunt-org/webapp/framework"
 
@@ -16,10 +17,11 @@ import (
  */
 type venue struct {
 	framework.BaseModel
-	Name    string  `db:"name"`
-	Address string  `db:"address"`
-	CityID  int     `db:"city_id"`
-	WebURL  url.URL `db:"web_url"`
+	Name     string `db:"name"`
+	Address  string `db:"address"`
+	CityID   uint64 `db:"city_id"`
+	WebURL   string `db:"web_url"`
+	Capacity uint   `db:"capacity"`
 }
 
 /*
@@ -46,6 +48,20 @@ func (v *venue) save() error {
 }
 
 /*
+ * String returns a one-line representation of the venue address.
+ */
+func (v *venue) String() string {
+
+	city, err := GetCityByID(v.DB, v.CityID)
+	if err != nil {
+		slog.Error("GetCityByID failed.", "err", err)
+		return "error"
+	}
+
+	return v.Address + ", " + city.Name + ", " + city.Admin1
+}
+
+/*
  * table returns the table name used in the database.
  */
 func (e *venue) table() string { return "venues" }
@@ -58,12 +74,12 @@ func (e *venue) table() string { return "venues" }
  * getVenueByID returns a Venue from the DB by its ID.
  *
  */
-func getVenueByID(db *pgxpool.Pool, id string) (*venue, error) {
+func GetVenueByID(db *pgxpool.Pool, id uint64) (*venue, error) {
 
 	v := initVenue(db)
 
-	q := `SELECT ` + v.primaryKey() + ` FROM ` + v.table() + ` WHERE ` + v.primaryKey() + ` = $1`
-	rows, _ := db.Query(context.Background(), q, id)
+	q := `SELECT * FROM ` + v.table() + ` WHERE ` + v.primaryKey() + ` = $1`
+	rows, _ := db.Query(context.Background(), q, strconv.FormatUint(id, 10))
 	v, err := pgx.CollectExactlyOneRow(rows, pgx.RowToAddrOfStructByName[venue])
 	if err != nil {
 		return nil, err
