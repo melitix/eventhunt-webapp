@@ -141,12 +141,13 @@ CREATE TABLE app.events (
 	name			varchar(80)		NOT NULL,
 	start_time		timestamp		NOT NULL,
 	end_time		timestamp		NOT NULL,
-	summary			varchar(255)	NOT NULL DEFAULT '',
-	description		TEXT			NOT NULL DEFAULT '',
-	web_url			varchar(1000)	NOT NULL DEFAULT '',
-	announce_url	varchar(1000)	NOT NULL DEFAULT '',
-	attendee_limit	INTEGER			NOT NULL DEFAULT 0,
+	summary			varchar(255)	NOT NULL	DEFAULT '',
+	description		TEXT			NOT NULL	DEFAULT '',
+	web_url			varchar(1000)	NOT NULL	DEFAULT '',
+	announce_url	varchar(1000)	NOT NULL	DEFAULT '',
+	attendee_limit	INTEGER			NOT NULL	DEFAULT 0,
 	venue_id		INTEGER			references app.venues(id) DEFAULT null,
+	location_url	varchar(1000)	NOT NULL	DEFAULT '',
 	created_time	timestamp		NOT NULL	DEFAULT CURRENT_TIMESTAMP,
 	updated_time	timestamp		NOT NULL	DEFAULT CURRENT_TIMESTAMP
 );

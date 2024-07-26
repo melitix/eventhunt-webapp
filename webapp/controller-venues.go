@@ -3,6 +3,7 @@ package main
 import (
 	"log/slog"
 	"net/http"
+	"net/url"
 	"strconv"
 
 	"github.com/eventhunt-org/webapp/framework"
@@ -88,6 +89,41 @@ func (a *app) venueNewPost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	e.Venue = v
+	e.VenueID = &v.ID
+	e.Save()
+
+	http.Redirect(w, r, "/events/"+e.IDString(), http.StatusFound)
+	return
+}
+
+/*
+ * Processing of the new venue event page, for www.
+ */
+func (a *app) venueWWWPost(w http.ResponseWriter, r *http.Request) {
+
+	session, _ := store.Get(r, "login")
+
+	// middlewareEvent ensures we have an Event
+	e := r.Context().Value("event").(*db.Event)
+
+	r.ParseForm()
+	defer r.Body.Close()
+
+	urlWWW, err := url.Parse(r.Form.Get("url"))
+	if err != nil {
+
+		slog.Error("URL is not valid.", "url", urlWWW)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"URL was invalid.",
+		})
+
+		session.Save(r, w)
+		http.Redirect(w, r, "/events/"+e.IDString()+"/new-venue#www", http.StatusFound)
+		return
+	}
+
+	e.LocationURL = urlWWW.String()
 	e.Save()
 
 	http.Redirect(w, r, "/events/"+e.IDString(), http.StatusFound)

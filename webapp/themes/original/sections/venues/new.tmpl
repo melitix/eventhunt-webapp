@@ -6,7 +6,10 @@
 }
 </style>
 <script type="text/JavaScript">
-  $( function() {
+	$( function() {
+
+		$( "#tabs" ).tabs();
+
     $.widget( "custom.combobox", {
       _create: function() {
         this.wrapper = $( "<span>" )
@@ -106,26 +109,48 @@
     $( "#city" ).combobox();
   } );
   </script>
-<h1>Choose a venue for your event</h1>
-<form class="design-1" action="/events/{{ .Event.ID }}/new-venue" method="POST">
-	<p>Tell people where your event will take place. While this step can be skipped, it's strongly recommended.</p>
-	<div class="input-group required">
-		<label for="venue-name">Venue Name</label>
-		<input name="venue-name" type="text" placeholder="name of the place" required>
+<h1>Choose a location for your event</h1>
+<div id="tabs">
+	<ul>
+		<li><a href="#irl">In-person event</a></li>
+		<li><a href="#www">Online event</a></li>
+	</ul>
+	<div id="irl">
+		<form class="design-1" action="/events/{{ .Event.ID }}/new-venue/irl" method="POST">
+			<p>Tell people where your event will take place.</p>
+			<div class="input-group required">
+				<label for="venue-name">Venue Name</label>
+				<input name="venue-name" type="text" placeholder="name of the place" required>
+			</div>
+			<div class="input-group required">
+				<label for="street-address">Address</label>
+				<input name="street-address" type="text" placeholder="address with street number" required>
+			</div>
+			<div class="input-group required">
+				<label for="city">City</label>
+				<select id="city" name="city" required>
+						 <option value="">Select one...</option>
+					{{range .Cities }}<option value="{{ .ID }}">{{ .Name }}, {{ .Admin1 }}</option>{{ end }}
+				</select>
+			</div>
+			<p class="required-warning"><span style="color:red">*</span> required field</p>
+			<input type="submit" class="btn primary" value="Add Venue">
+		</form>
 	</div>
-	<div class="input-group required">
-		<label for="street-address">Address</label>
-		<input name="street-address" type="text" placeholder="address with street number" required>
+	<div id="www">
+		<form class="design-1" action="/events/{{ .Event.ID }}/new-venue/www" method="POST">
+			<p>Provide the URL where the event will be streamed.</p>
+			<div class="input-group">
+				<label for="tool-name">Tool Name</label>
+				<input name="tool-name" type="text" placeholder="Zoom, for example">
+			</div>
+			<div class="input-group required">
+				<label for="url">URL</label>
+				<input name="url" type="url" placeholder="https://zoom.us/j/123456789" required>
+			</div>
+			<p class="required-warning"><span style="color:red">*</span> required field</p>
+			<input type="submit" class="btn primary" value="Set URL">
+		</form>
 	</div>
-	<div class="input-group required">
-		<label for="city">City</label>
-		<select id="city" name="city" required>
-			    <option value="">Select one...</option>
-			{{range .Cities }}<option value="{{ .ID }}">{{ .Name }}, {{ .Admin1 }}</option>{{ end }}
-		</select>
-	</div>
-	<p class="required-warning"><span style="color:red">*</span> required field</p>
-	<input type="submit" class="btn primary" value="Add Venue">
-	<a class="btn secondary">Skip</a>
-</form>
+</div>
 {{ end }}

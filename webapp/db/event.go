@@ -30,6 +30,7 @@ type Event struct {
 	AttendeeLimit int       `db:"attendee_limit"`
 	VenueID       *uint64   `db:"venue_id"`
 	Venue         *venue    `db:"-"`
+	LocationURL   string    `db:"location_url"`
 }
 
 /*
@@ -59,6 +60,8 @@ func (e *Event) Save() error {
 		web_url=@webURL,
 		announce_url=@announceURL,
 		attendee_limit=@attendeeLimit,
+		venue_id=@venueID,
+		location_url=@locationURL,
 		updated_time=@updatedTime
 	WHERE ` + e.primaryKey() + `=@id`
 
@@ -72,6 +75,8 @@ func (e *Event) Save() error {
 			"webURL":        e.WebURL,
 			"announceURL":   e.AnnounceURL,
 			"attendeeLimit": e.AttendeeLimit,
+			"venueID":       e.VenueID,
+			"locationURL":   e.LocationURL,
 			"updatedTime":   e.UpdatedTime,
 			"id":            e.ID,
 		})

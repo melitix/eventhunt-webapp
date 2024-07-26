@@ -54,9 +54,14 @@ func (a *app) initializeRoutes() {
 			r.Route("/{event-id:[0-9]+}", func(r chi.Router) {
 				r.Use(a.middlewareEvent)
 				r.Get("/", a.eventsSingle)
-				r.With(a.middlewareLIO).Get("/new-venue", a.venueNew)
-				r.With(a.middlewareLIO).Post("/new-venue", a.venueNewPost)
-				r.With(a.middlewareLIO).Get("/rsvp/{status:yes|maybe|no}", a.rsvpsInput)
+				r.Group(func(r chi.Router) {
+					r.Use(a.middlewareLIO)
+
+					r.Get("/new-venue", a.venueNew)
+					r.Post("/new-venue/irl", a.venueNewPost)
+					r.Post("/new-venue/www", a.venueWWWPost)
+					r.Get("/rsvp/{status:yes|maybe|no}", a.rsvpsInput)
+				})
 			})
 		})
 
