@@ -27,6 +27,7 @@ type Group struct {
 	Slug        string   `db:"slug"`
 	WebURL      *url.URL `db:"web_url"`
 	CityID      uint64   `db:"city_id" validate:"required"`
+	TheCity     *City    `db:"-"`
 	IsPrivate   bool     `db:"is_private"`
 }
 
@@ -212,8 +213,15 @@ func GetGroupsByQuery(db *pgxpool.Pool, q string, args any) ([]*Group, error) {
 		return nil, err
 	}
 
+	// prep each group
 	for _, g := range groups {
+
 		g.DB = db
+
+		g.TheCity, err = GetCityByID(db, g.CityID)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return groups, nil
