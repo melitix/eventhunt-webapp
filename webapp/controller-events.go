@@ -146,7 +146,11 @@ func (a *app) eventsNew(w http.ResponseWriter, r *http.Request) {
 func (a *app) eventsNewPost(w http.ResponseWriter, r *http.Request) {
 
 	session, _ := store.Get(r, "login")
-	u, _ := initUser(a, r)
+
+	// middlewareLIO ensures we have a User
+	u, _ := r.Context().Value("user").(*db.User)
+	// middlewareGroup ensures we have a Group
+	g := r.Context().Value("group").(*db.Group)
 
 	r.ParseForm()
 	defer r.Body.Close()
@@ -182,7 +186,7 @@ func (a *app) eventsNewPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	e, err := db.NewEvent(u, 1, name, startTime, endTime, summary)
+	e, err := db.NewEvent(u, g.ID, name, startTime, endTime, summary)
 	if err != nil {
 
 		slog.Error("Failed to create event.", "msg", err)

@@ -108,9 +108,7 @@ func initEvent(db *pgxpool.Pool) *Event {
  * Create a new event in the system. Includes the base event itself, not
  * information such as the venue or groups.
  */
-func NewEvent(u *User, gID uint64, name string, startTime, endTime time.Time, summary string) (*Event, error) {
-
-	groupID := uint64(1) //DEBUG - hardcoded for now
+func NewEvent(u *User, groupID uint64, name string, startTime, endTime time.Time, summary string) (*Event, error) {
 
 	e := initEvent(u.DB)
 	e.Name = name
