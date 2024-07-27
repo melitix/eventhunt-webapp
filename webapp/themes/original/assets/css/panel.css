@@ -27,6 +27,14 @@
 		strong{
 			margin-right: 10px;
 		}
+
+		a{
+			color: black;
+
+			&:hover{
+				text-decoration: underline;
+			}
+		}
 	}
 
 	main{
