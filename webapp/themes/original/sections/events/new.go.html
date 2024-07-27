@@ -1,6 +1,6 @@
 {{ define "main" }}
 <h1>Host an event for {{ .Group.Name }}</h1>
-<form class="design-1" action="/events/new" method="POST">
+<form class="design-1" action="/groups/{{ .Group.IDString }}/schedule" method="POST">
 	<p>First let's define the basic event information.</p>
 	<div class="input-group required">
 		<label for="event-name">Event Name</label>

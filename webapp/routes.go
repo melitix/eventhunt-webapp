@@ -50,7 +50,6 @@ func (a *app) initializeRoutes() {
 		r.Route("/events", func(r chi.Router) {
 			r.Get("/", a.eventsIndex)
 			r.With(a.middlewareLIO).Get("/{:new|schedule}", a.eventsNewAlias)
-			r.With(a.middlewareLIO).Post("/{:new|schedule}", a.eventsNewPost)
 			r.Route("/{event-id:[0-9]+}", func(r chi.Router) {
 				r.Use(a.middlewareEvent)
 				r.Get("/", a.eventsSingle)
@@ -75,6 +74,7 @@ func (a *app) initializeRoutes() {
 				r.Use(a.middlewareGroup)
 				r.Get("/", a.groupsSingle)
 				r.Get("/{:new|schedule}", a.eventsNew)
+				r.With(a.middlewareLIO).Post("/{:new|schedule}", a.eventsNewPost)
 				r.With(a.middlewareLIO).Get("/join", a.groupsJoin)
 			})
 		})
