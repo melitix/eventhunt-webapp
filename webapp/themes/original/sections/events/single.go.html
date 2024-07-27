@@ -14,6 +14,11 @@
 				<a class="btn primary" href="/events/{{ .Event.ID }}/rsvp/maybe">maybe</a>
 				<a class="btn negative" href="/events/{{ .Event.ID }}/rsvp/no">no</a>
 			</div>
+			{{ with .Event.Summary }}
+			<div class="container">
+				<p>{{ . }}</p>
+			</div>
+			{{ end }}
 			<div class="container">
 				<span><strong>Time:</strong>{{ .Event.StartTime.Format "January 2, 2006 3:04p.m." }} - {{ .Event.EndTime.Format "January 2, 2006 3:04p.m." }}</span><br />
 				<span><strong>Place:</strong>{{ with .Event.Venue }}{{ .String }}{{ else }}<a href="{{ .Event.LocationURL }}">{{ .Event.LocationURL }}</a>{{ end }}</span>
