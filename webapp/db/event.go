@@ -108,7 +108,7 @@ func initEvent(db *pgxpool.Pool) *Event {
  * Create a new event in the system. Includes the base event itself, not
  * information such as the venue or groups.
  */
-func NewEvent(name string, startTime, endTime time.Time, u *User, gID uint64) (*Event, error) {
+func NewEvent(u *User, gID uint64, name string, startTime, endTime time.Time, summary string) (*Event, error) {
 
 	groupID := uint64(1) //DEBUG - hardcoded for now
 
@@ -117,6 +117,7 @@ func NewEvent(name string, startTime, endTime time.Time, u *User, gID uint64) (*
 	e.StartTime = startTime
 	e.EndTime = endTime
 	e.GroupID = groupID
+	e.Summary = summary
 
 	// validate inputs
 	err := validate.Struct(e)
@@ -124,12 +125,13 @@ func NewEvent(name string, startTime, endTime time.Time, u *User, gID uint64) (*
 		return nil, err
 	}
 
-	q := `INSERT INTO ` + e.table() + ` (group_id, name, start_time, end_time) VALUES (@groupID, @name, @startTime, @endTime) RETURNING *`
+	q := `INSERT INTO ` + e.table() + ` (group_id, name, start_time, end_time, summary) VALUES (@groupID, @name, @startTime, @endTime, @summary) RETURNING *`
 	rows, _ := e.DB.Query(context.Background(), q, pgx.NamedArgs{
 		"groupID":   groupID,
 		"name":      e.Name,
 		"startTime": e.StartTime,
 		"endTime":   e.EndTime,
+		"summary":   e.Summary,
 	})
 
 	e, err = pgx.CollectExactlyOneRow(rows, pgx.RowToAddrOfStructByName[Event])
