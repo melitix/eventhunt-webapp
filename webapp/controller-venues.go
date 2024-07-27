@@ -22,6 +22,19 @@ func (a *app) venueNew(w http.ResponseWriter, r *http.Request) {
 	// middlewareEvent ensures we have an Event
 	e := r.Context().Value("event").(*db.Event)
 
+	// Only the owner of the group can add/edit an event
+	if !e.TheGroup.HasCreate(u.ID) {
+
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"You don't have permission to add a venue to this event.",
+		})
+
+		session.Save(r, w)
+		http.Redirect(w, r, "/events/"+e.IDString(), http.StatusFound)
+		return
+	}
+
 	cities, err := db.GetCitiesByAll(a.DB)
 	if err != nil {
 
@@ -50,8 +63,23 @@ func (a *app) venueNewPost(w http.ResponseWriter, r *http.Request) {
 
 	session, _ := store.Get(r, "login")
 
+	// middlewareLIO ensures we have a user
+	u := r.Context().Value("user").(*db.User)
 	// middlewareEvent ensures we have an Event
 	e := r.Context().Value("event").(*db.Event)
+
+	// Only the owner of the group can add/edit an event
+	if !e.TheGroup.HasCreate(u.ID) {
+
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"You don't have permission to add a venue to this event.",
+		})
+
+		session.Save(r, w)
+		http.Redirect(w, r, "/events/"+e.IDString(), http.StatusFound)
+		return
+	}
 
 	r.ParseForm()
 	defer r.Body.Close()
@@ -103,8 +131,23 @@ func (a *app) venueWWWPost(w http.ResponseWriter, r *http.Request) {
 
 	session, _ := store.Get(r, "login")
 
+	// middlewareLIO ensures we have a user
+	u := r.Context().Value("user").(*db.User)
 	// middlewareEvent ensures we have an Event
 	e := r.Context().Value("event").(*db.Event)
+
+	// Only the owner of the group can add/edit an event
+	if !e.TheGroup.HasCreate(u.ID) {
+
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"You don't have permission to add a venue to this event.",
+		})
+
+		session.Save(r, w)
+		http.Redirect(w, r, "/events/"+e.IDString(), http.StatusFound)
+		return
+	}
 
 	r.ParseForm()
 	defer r.Body.Close()

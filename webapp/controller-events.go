@@ -129,10 +129,25 @@ func (a *app) eventsNewAlias(w http.ResponseWriter, r *http.Request) {
  */
 func (a *app) eventsNew(w http.ResponseWriter, r *http.Request) {
 
+	session, _ := store.Get(r, "login")
+
 	// middlewareLIO ensures we have a user
 	u := r.Context().Value("user").(*db.User)
 	// middlewareGroup ensures we have a Group
 	g := r.Context().Value("group").(*db.Group)
+
+	// Only the owner of the group can create an event
+	if !g.HasCreate(u.ID) {
+
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"You don't have permission to create events for this group.",
+		})
+
+		session.Save(r, w)
+		http.Redirect(w, r, "/groups/"+g.IDString(), http.StatusFound)
+		return
+	}
 
 	renderPage(a, "events/new", w, r, map[string]interface{}{
 		"User":  u,
@@ -151,6 +166,19 @@ func (a *app) eventsNewPost(w http.ResponseWriter, r *http.Request) {
 	u, _ := r.Context().Value("user").(*db.User)
 	// middlewareGroup ensures we have a Group
 	g := r.Context().Value("group").(*db.Group)
+
+	// Only the owner of the group can create an event
+	if !g.HasCreate(u.ID) {
+
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"You don't have permission to create events for this group.",
+		})
+
+		session.Save(r, w)
+		http.Redirect(w, r, "/groups/"+g.IDString(), http.StatusFound)
+		return
+	}
 
 	r.ParseForm()
 	defer r.Body.Close()
