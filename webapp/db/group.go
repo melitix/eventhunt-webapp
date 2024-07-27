@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log/slog"
-	"net/url"
 	"strconv"
 
 	"github.com/eventhunt-org/webapp/framework"
@@ -20,15 +19,15 @@ const DB_TABLE_GROUP = "groups"
  */
 type Group struct {
 	framework.BaseModel
-	UserID      uint64   `db:"user_id"`
-	Name        string   `db:"name" validate:"required,min=3,max=30"`
-	Summary     string   `db:"summary" validate:"omitempty,min=3,max=200"`
-	Description string   `db:"description"`
-	Slug        string   `db:"slug"`
-	WebURL      *url.URL `db:"web_url"`
-	CityID      uint64   `db:"city_id" validate:"required"`
-	TheCity     *City    `db:"-"`
-	IsPrivate   bool     `db:"is_private"`
+	UserID      uint64 `db:"user_id"`
+	Name        string `db:"name" validate:"required,min=3,max=30"`
+	Summary     string `db:"summary" validate:"omitempty,min=3,max=200"`
+	Description string `db:"description"`
+	Slug        string `db:"slug"`
+	WebURL      string `db:"web_url"`
+	CityID      uint64 `db:"city_id" validate:"required"`
+	TheCity     *City  `db:"-"`
+	IsPrivate   bool   `db:"is_private"`
 }
 
 /*
@@ -157,12 +156,13 @@ func initGroup(db *pgxpool.Pool) *Group {
  * NewGroup creates a new Group struct, validates it, and if good, saves itr to
  * the database.
  */
-func NewGroup(u *User, name string, cityID uint64, summary string, isPrivate bool) (*Group, error) {
+func NewGroup(u *User, name string, cityID uint64, summary, groupURL string, isPrivate bool) (*Group, error) {
 
 	g := initGroup(u.DB)
 	g.Name = name
 	g.CityID = cityID
 	g.Summary = summary
+	g.WebURL = groupURL
 	g.IsPrivate = isPrivate
 
 	err := validate.Struct(g)
@@ -171,11 +171,12 @@ func NewGroup(u *User, name string, cityID uint64, summary string, isPrivate boo
 	}
 
 	q := `INSERT INTO ` + g.table() + ` 
-		(user_id, name, summary, description, slug, city_id, is_private) 
-		VALUES (@userID, @name, @summary, '', '', @cityID, @isPrivate) RETURNING *`
+		(user_id, name, summary, description, slug, web_url, city_id, is_private) 
+		VALUES (@userID, @name, @summary, '', '', @groupURL, @cityID, @isPrivate) RETURNING *`
 	rows, _ := u.DB.Query(context.Background(), q, pgx.NamedArgs{
 		"userID":    u.ID,
 		"name":      g.Name,
+		"groupURL":  g.WebURL,
 		"cityID":    g.CityID,
 		"summary":   g.Summary,
 		"isPrivate": g.IsPrivate,

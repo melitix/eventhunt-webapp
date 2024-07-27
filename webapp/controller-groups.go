@@ -118,6 +118,7 @@ func (a *app) groupsNewPost(w http.ResponseWriter, r *http.Request) {
 	name := r.Form.Get("group-name")
 	city := r.Form.Get("city")
 	summary := r.Form.Get("group-summary")
+	groupURL := r.Form.Get("group-url")
 
 	cityID, err := strconv.ParseUint(city, 10, 64)
 	if err != nil {
@@ -135,7 +136,7 @@ func (a *app) groupsNewPost(w http.ResponseWriter, r *http.Request) {
 
 	isPrivate := false
 
-	_, err = db.NewGroup(u, name, cityID, summary, isPrivate)
+	_, err = db.NewGroup(u, name, cityID, summary, groupURL, isPrivate)
 	if err != nil {
 
 		slog.Error("Failed to create group.", "err", err)
