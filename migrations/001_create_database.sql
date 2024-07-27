@@ -104,7 +104,7 @@ CREATE TABLE app.groups (
 	summary			varchar(255)	NOT NULL,
 	description		TEXT			NOT NULL,
 	slug			varchar(50)		NOT NULL,
-	web_url			varchar(1000),
+	web_url			varchar(1000)	NOT NULL,
 	city_id			INTEGER			NOT NULL references app.cities(id),
 	is_private		boolean			NOT NULL,
 	created_time	timestamp		NOT NULL	DEFAULT CURRENT_TIMESTAMP,
