@@ -12,7 +12,7 @@
 			</div>
 			<div class="container">
 				<p class="summary">{{ .Group.Summary }}</p>
-				<span><strong>Website:</strong>n/a</span><br />
+				<span><strong>Website:</strong>{{ with .Group.WebURL }}<a href="{{ . }}">{{ . }}</a>{{ else }}n/a{{ end }}</span><br />
 				<span><strong>City:</strong>{{ .Group.TheCity.String }}</span>
 			</div>
 			<div class="container">
