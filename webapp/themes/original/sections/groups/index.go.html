@@ -1,7 +1,9 @@
 {{ define "main-id" }}main-groups{{ end }}
 {{ define "main" }}
-<a class="btn primary" href="/groups/my">My Groups</a>
-<a class="btn primary" href="/groups/all">All Groups</a>
+<div class="button-section">
+	<a class="btn primary" href="/groups/my">My Groups</a>
+	<a class="btn primary" href="/groups/all">All Groups</a>
+</div>
 <div class="card-grid groups">
 {{ range .Groups }}
 	{{ template "gt-card" . }}
@@ -13,5 +15,7 @@
 	{{ end }}
 {{ end }}
 </div>
-<a class="btn primary" href="/groups/new">Start a group</a>
+<div class="button-section">
+	<a class="btn primary" href="/groups/new">Start a new group</a>
+</div>
 {{ end }}
