@@ -17,19 +17,23 @@
 			</div>
 			<div class="container">
 				<h2>Upcoming Events</h2>
-			{{ range .Group.UpcomingEvents 10 }}
-				<div>{{ .Name }}</div>
-			{{ else }}
-				none
-			{{ end }}
+				<ul>
+				{{ range .Group.UpcomingEvents 10 }}
+					<li><a href="/events/{{ .IDString }}">{{ .Name }}</a></li>
+				{{ else }}
+					none
+				{{ end }}
+				</ul>
 			</div>
 			<div class="container">
 				<h2>Past Events</h2>
-			{{ range .Group.PastEvents 10 }}
-				<div>{{ .Name }}</div>
-			{{ else }}
-				none
-			{{ end }}
+				<ul>
+				{{ range .Group.PastEvents 10 }}
+					<li><a href="/events/{{ .IDString }}">{{ .Name }}</a></li>
+				{{ else }}
+					none
+				{{ end }}
+				</ul>
 			</div>
 		</main>
 		<aside>
