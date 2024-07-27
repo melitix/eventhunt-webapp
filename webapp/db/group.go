@@ -31,6 +31,25 @@ type Group struct {
 }
 
 /*
+ * HasCreate returns true if the provided ID (User) is of a role that is
+ * allowed to create events.
+ */
+func (g *Group) HasCreate(id uint64) bool {
+
+	memberships := g.Memberships()
+
+	for _, ms := range memberships {
+		if ms.TheUser.ID == id {
+			if ms.Role == MemberOwner || ms.Role == MemberHost || ms.Role == MemberCohost {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+
+/*
  * IsMember returns true if the provided ID (User) is a member of this Group.
  */
 func (g *Group) IsMember(id uint64) bool {
