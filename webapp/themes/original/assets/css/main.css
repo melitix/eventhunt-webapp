@@ -158,6 +158,11 @@ body > main{
 	width: 90%;
 	min-width: 350px;
 	max-width: 1200px;
+
+	.button-section{
+		padding: 20px 0;
+		text-align: center;
+	}
 }
 	main > header{
 		display: flex;
