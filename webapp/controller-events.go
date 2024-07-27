@@ -152,6 +152,7 @@ func (a *app) eventsNewPost(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
 	name := r.Form.Get("event-name")
+	summary := r.Form.Get("event-summary")
 
 	startTime, err := time.Parse("2006-01-02T15:04", r.Form.Get("start-time"))
 	if err != nil {
@@ -181,7 +182,7 @@ func (a *app) eventsNewPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	e, err := db.NewEvent(name, startTime, endTime, u, 1)
+	e, err := db.NewEvent(u, 1, name, startTime, endTime, summary)
 	if err != nil {
 
 		slog.Error("Failed to create event.", "msg", err)
