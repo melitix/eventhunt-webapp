@@ -40,6 +40,7 @@ func (a *app) groupsIndex(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	slog.Error("DEBUG - len", "len", len(groups))
 	renderPage(a, "groups/index.html", w, r, map[string]interface{}{
 		"User":   u,
 		"Groups": groups,
