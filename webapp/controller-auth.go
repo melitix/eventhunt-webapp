@@ -323,7 +323,7 @@ func (this *app) authSignupPost(w http.ResponseWriter, r *http.Request) {
 	e, err := db.AddEmailAddress(u, email, true, false)
 	if err != nil {
 
-		slog.Error("There was an error signing up. Message: %s", err)
+		slog.Error("There was an error signing up.", "err", err)
 		session.AddFlash(framework.Flash{
 			framework.FlashFail,
 			"There was an error saving the email address.",
@@ -338,7 +338,7 @@ func (this *app) authSignupPost(w http.ResponseWriter, r *http.Request) {
 	tok, err := db.NewUserToken(u, "email-verify")
 	if err != nil {
 
-		slog.Error("Failed to create user token. Message: %s", err)
+		slog.Error("Failed to create user token.", "err", err)
 		session.AddFlash(framework.Flash{
 			framework.FlashFail,
 			"There was an error saving the email address.",
@@ -351,7 +351,7 @@ func (this *app) authSignupPost(w http.ResponseWriter, r *http.Request) {
 
 	if err := sendEmailVerification(e.Value, tok.Token); err != nil {
 
-		slog.Error("There was an error signing up. Message: %s", err)
+		slog.Error("There was an error signing up.", "err", err)
 		session.AddFlash(framework.Flash{
 			framework.FlashFail,
 			"There was an error saving the email address.",
