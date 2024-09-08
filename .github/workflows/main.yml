@@ -44,7 +44,7 @@ jobs:
         go install gotest.tools/gotestsum@latest
         gotestsum --version
     - run: cd webapp && mage -v test
-  deploy-dry-run:
+  build-dry-run:
     runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v4
@@ -52,4 +52,3 @@ jobs:
       with:
         version: '2.2.0'
         args: "release --snapshot"
-        workdir: "webapp"
