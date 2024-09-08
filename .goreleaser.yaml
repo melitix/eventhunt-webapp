@@ -21,9 +21,9 @@ archives:
 
 dockers:
 - image_templates:
-  - "ghcr.io/eventhunt-org/webapp:v{{ .Version }}"
-  - "ghcr.io/eventhunt-org/webapp:{{ if .IsSnapshot }}staging{{ else }}v{{ .Major }}.{{ .Minor }}{{ end }}"
-  - "ghcr.io/eventhunt-org/webapp:latest"
+  - "ghcr.io/melitix/eventhunt-webapp:v{{ .Version }}"
+  - "ghcr.io/melitix/eventhunt-webapp:{{ if .IsSnapshot }}alpha{{ else }}v{{ .Major }}.{{ .Minor }}{{ end }}"
+  - "ghcr.io/melitix/eventhunt-webapp:latest"
   extra_files:
   - webapp/themes
   dockerfile: goreleaser.Dockerfile
