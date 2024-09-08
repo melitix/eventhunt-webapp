@@ -1,6 +1,6 @@
 module github.com/eventhunt-org/webapp
 
-go 1.22
+go 1.23.1
 
 require (
 	github.com/go-chi/chi/v5 v5.0.14
