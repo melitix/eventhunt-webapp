@@ -1,7 +1,7 @@
 {{ define "flashes" }}
 <div id="flashes">
-	{{ range .Flashes }}
+{{ range .Flashes }}
 	<span class="flash type-{{ .Type }}">{{ .Message }}</span>
-	{{ end }}
+{{ end }}
 </div>
 {{ end }}

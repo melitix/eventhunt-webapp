@@ -1,6 +1,8 @@
 package framework
 
 import (
+	"encoding/gob"
+
 	"github.com/gorilla/sessions"
 )
 
@@ -37,4 +39,9 @@ func Flashes(session *sessions.Session) []Flash {
 	}
 
 	return flashes
+}
+
+func init() {
+	// register Flash so that we can use it with session
+	gob.Register(Flash{})
 }
