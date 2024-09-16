@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"database/sql"
 	"errors"
 	"fmt"
 	"log/slog"
@@ -317,15 +316,19 @@ func VerifyPassword(db *pgxpool.Pool, username, password string) uint64 {
 	var userID uint64
 	var hashedPassword string
 
-	err := db.QueryRow(context.Background(), "SELECT id, password FROM users WHERE username = $1", username).Scan(
-		&userID, &hashedPassword)
-	if err != nil {
+	q := `SELECT id, password FROM users WHERE username = @username`
+	args := pgx.NamedArgs{
+		"username": username,
+	}
 
-		if err == sql.ErrNoRows {
-			// Username not found
+	err := db.QueryRow(context.Background(), q, args).Scan(&userID, &hashedPassword)
+	if err != nil {
+		if errors.Is(err, pgx.ErrNoRows) {
+			// Username not found, this is okay
 			return 0
 		} else {
-			log.Fatal(err)
+			slog.Error("There was an issue looking up a user for password verification.", "user", username, "err", err)
+			return 0
 		}
 	}
 
