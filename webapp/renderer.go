@@ -9,7 +9,6 @@ import (
 	"reflect"
 
 	"github.com/eventhunt-org/webapp/framework"
-
 	"github.com/spf13/viper"
 )
 
@@ -20,7 +19,10 @@ func renderPage(a *app, tplHTML string, w http.ResponseWriter, r *http.Request, 
 	}
 
 	// Load session so that we may get Flashes
-	session, _ := store.Get(r, "login")
+	session, err := store.Get(r, "login")
+	if err != nil {
+		slog.Error("Failed to retrieve session.")
+	}
 	flashes := framework.Flashes(session)
 
 	tplData["App"] = map[string]string{
@@ -57,7 +59,7 @@ func renderPage(a *app, tplHTML string, w http.ResponseWriter, r *http.Request, 
 
 	tpl := template.Must(template.New("theme").Funcs(funcMap).ParseGlob(a.ThemePath() + "partials/*.html"))
 	tpl, _ = tpl.ParseGlob(a.ThemePath() + "partials/*.js")
-	tpl, err := tpl.ParseFiles(
+	tpl, err = tpl.ParseFiles(
 		a.ThemePath()+"sections/"+tplHTML+".go.html",
 		a.ThemePath()+"base/"+bases[len(bases)-1]+".html",
 	)
