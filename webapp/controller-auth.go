@@ -29,7 +29,10 @@ func (this *app) authLoginPost(w http.ResponseWriter, r *http.Request) {
 	var verified bool
 	var userID uint64
 
-	session, _ := store.Get(r, "login")
+	session, err := store.Get(r, "login")
+	if err != nil {
+		slog.Error("Failed to retrieve session.")
+	}
 
 	r.ParseForm()
 	username := r.Form.Get("username")
@@ -51,17 +54,21 @@ func (this *app) authLoginPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	errs = framework.Validator.Var(username, "gt=0,lte=25")
+	errs = framework.Validator.Var(username, "gt=3,lte=25")
 	if errs != nil {
 
-		log.Error(errs)
+		slog.Error(errs.Error())
 
 		session.AddFlash(framework.Flash{
 			framework.FlashFail,
-			"Username must be between 1 and 25 characters.",
+			"Username must be 3 - 25 characters.",
 		})
 
-		session.Save(r, w)
+		err := session.Save(r, w)
+		if err != nil {
+			slog.Error("Failed to save session.")
+		}
+
 		http.Redirect(w, r, "/login", http.StatusFound)
 		return
 	}
