@@ -8,3 +8,4 @@
 /webapp/unit-tests.xml
 
 .env
+.compose.env
