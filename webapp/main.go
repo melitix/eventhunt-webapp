@@ -62,7 +62,7 @@ func main() {
 				TimeFormat: "2006/01/02 15:04:05",
 			}),
 		))
-		store.Options.Domain = "melitix.events"
+		store.Options.Domain = viper.GetString("app_host")
 	case "staging":
 		slog.SetDefault(slog.New(
 			tint.NewHandler(os.Stdout, &tint.Options{
@@ -70,7 +70,7 @@ func main() {
 				TimeFormat: "2006/01/02 15:04:05",
 			}),
 		))
-		store.Options.Domain = "staging.melitix.com"
+		store.Options.Domain = viper.GetString("app_host")
 	default: // also development
 		slog.SetDefault(slog.New(
 			tint.NewHandler(os.Stdout, &tint.Options{
@@ -78,7 +78,6 @@ func main() {
 				TimeFormat: "15:04:05",
 			}),
 		))
-		store.Options.Domain = "127.0.0.1"
 	}
 
 	slog.Info("Starting app...")
