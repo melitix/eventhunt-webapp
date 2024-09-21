@@ -1,13 +1,13 @@
 module github.com/eventhunt-org/webapp
 
-go 1.23.1
+go 1.23
 
 require (
 	github.com/go-chi/chi/v5 v5.0.14
 	github.com/go-playground/validator/v10 v10.22.0
 	github.com/go-sql-driver/mysql v1.7.0
 	github.com/gopherlibs/gpic v0.7.0
-	github.com/gorilla/sessions v1.3.0
+	github.com/gorilla/sessions v1.4.0
 	github.com/jackc/pgx/v5 v5.6.0
 	github.com/lmittmann/tint v1.0.3
 	github.com/magefile/mage v1.15.0

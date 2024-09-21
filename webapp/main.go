@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log/slog"
+	"net/http"
 	"os"
 
 	"github.com/eventhunt-org/webapp/framework"
@@ -63,6 +64,7 @@ func main() {
 			}),
 		))
 		store.Options.Domain = viper.GetString("app_host")
+		store.Options.SameSite = http.SameSiteStrictMode
 	case "staging":
 		slog.SetDefault(slog.New(
 			tint.NewHandler(os.Stdout, &tint.Options{
@@ -71,6 +73,7 @@ func main() {
 			}),
 		))
 		store.Options.Domain = viper.GetString("app_host")
+		store.Options.SameSite = http.SameSiteStrictMode
 	default: // also development
 		slog.SetDefault(slog.New(
 			tint.NewHandler(os.Stdout, &tint.Options{
@@ -78,6 +81,8 @@ func main() {
 				TimeFormat: "15:04:05",
 			}),
 		))
+		store.Options.Secure = false
+		store.Options.SameSite = http.SameSiteLaxMode
 	}
 
 	slog.Info("Starting app...")
