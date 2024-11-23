@@ -18,7 +18,7 @@ jobs:
       PGDATABASE: app
     services:
       db:
-        image: postgis/postgis:16-3.4
+        image: postgis/postgis:17-3.5
         env:
           POSTGRES_USER: app
           POSTGRES_PASSWORD: APass
