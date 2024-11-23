@@ -9,7 +9,7 @@ Meet up locally with like-minded people.
 
 ### Production
 
-- PostgreSQL v16.3
+- PostgreSQL v17
 - Tern - (DB migrations) https://github.com/jackc/tern
 
 

@@ -3,7 +3,7 @@
 ## Dependencies
 
 - [Go 1.22+](https://go.dev/)
-- PostgreSQL v16.3 - this can be installed directly or via Docker
+- PostgreSQL v17 - this can be installed directly or via Docker
 - [Tern](https://github.com/jackc/tern) - (DB migrations)
 - [GoTestSum](https://github.com/gotestyourself/gotestsum) (optional)
 - Docker (optional)
@@ -24,7 +24,7 @@ cd webapp
 First time run:
 
 ```bash
-docker run --name=eventhunt-db -e POSTGRES_USER=app -e POSTGRES_PASSWORD=APass -e POSTGRES_DB=app -p 9001:5432 -d postgis/postgis:16-3.4
+docker run --name=eventhunt-db -e POSTGRES_USER=app -e POSTGRES_PASSWORD=APass -e POSTGRES_DB=app -p 9001:5432 -d postgis/postgis:17-3.5
 ```
 
 You can swap out the password `APass` if you'd like, but as this is a local development environment, this isn't important.
