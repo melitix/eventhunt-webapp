@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log/slog"
 	"net/http"
 	"net/url"
 
@@ -81,7 +82,7 @@ func (this *app) utilVerifyEmail(w http.ResponseWriter, r *http.Request) {
 	tok, e, err := db.GetEmailToken(this.DB, code)
 	if err != nil {
 
-		log.Error("Error: Failed to get token.")
+		slog.Error("Failed to get token from DB.", "token", code, "err", err)
 		session.AddFlash(framework.Flash{
 			framework.FlashFail,
 			"Invalid token.",

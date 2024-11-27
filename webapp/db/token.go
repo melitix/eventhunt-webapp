@@ -103,7 +103,7 @@ func NewUserToken(u *User, purpose string) (*token, error) {
 	}
 
 	err = u.DB.QueryRow(context.Background(), "INSERT INTO user_tokens (user_id, the_value, expiration, purpose) VALUES ($1, $2, $3, $4) RETURNING id",
-		u.ID, hToken, time.Now().Add(time.Hour*1), purpose).Scan(&lastInsertID)
+		u.ID, hToken, time.Now().UTC().Add(time.Hour*1), purpose).Scan(&lastInsertID)
 	if err != nil {
 		return nil, errors.New("Error: Failed to store new user token.")
 	}
@@ -181,7 +181,7 @@ func GetEmailToken(db *pgxpool.Pool, tValue string) (*token, *emailAddress, erro
 
 	tokens, err := GetActiveTokens(db, 0, 100)
 	if err != nil {
-		return nil, nil, errors.New("Error: Failed to get token list.")
+		return nil, nil, errors.New("Failed to get active token list.")
 	}
 
 	for _, t := range tokens {
@@ -260,9 +260,9 @@ func GetTokensByUser(u *User, start int, count int) ([]*token, error) {
  */
 func GetActiveTokens(db *pgxpool.Pool, start int, count int) ([]*token, error) {
 
-	rows, err := db.Query(context.Background(), "SELECT id FROM user_tokens WHERE created_at = updated_at LIMIT $1 OFFSET $2", count, start)
+	rows, err := db.Query(context.Background(), "SELECT id FROM user_tokens WHERE created_time = updated_time LIMIT $1 OFFSET $2", count, start)
 	if err != nil {
-		return nil, errors.New("Error: Running SELECT query for bike by user list failed.")
+		return nil, errors.New("Active tokens query failed. Err: " + err.Error())
 	}
 	defer rows.Close()
 
