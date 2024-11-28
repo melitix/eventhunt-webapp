@@ -112,8 +112,8 @@ func NewEvent(u *User, groupID uint64, name string, startTime, endTime time.Time
 
 	e := initEvent(u.DB)
 	e.Name = name
-	e.StartTime = startTime
-	e.EndTime = endTime
+	e.StartTime = startTime.UTC()
+	e.EndTime = endTime.UTC()
 	e.GroupID = groupID
 	e.Summary = summary
 

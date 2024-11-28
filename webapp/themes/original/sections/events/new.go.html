@@ -7,7 +7,7 @@
 		<input name="event-name" type="text" placeholder="for example: April Workshop" required>
 	</div>
 	<div class="input-group required">
-		<label for="start-time">Start Date / Time</label>
+		<label for="start-time">Start Date / Time <i class="fa-xs fa-solid fa-circle-question tooltip" data-fa-transform="up-6" title="The timezone is based on your browser."></i></label>
 		<input name="start-time" type="datetime-local" required>
 	</div>
 	<div class="input-group required">
@@ -19,6 +19,10 @@
 		<textarea name="event-summary"></textarea>
 	</div>
 	<p class="required-warning"><span style="color:red">*</span> required field</p>
+	<input id="timezone" name="timezone" type="hidden">
+	<script type="text/JavaScript">
+		document.getElementById( 'timezone' ).value = Intl.DateTimeFormat().resolvedOptions().timeZone;
+	</script>
 	<input type="submit" class="btn primary" value="Next">
 </form>
 {{ end }}
