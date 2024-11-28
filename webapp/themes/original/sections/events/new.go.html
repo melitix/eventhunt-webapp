@@ -1,4 +1,15 @@
 {{ define "main" }}
+<script type="text/JavaScript">
+	function copyDate(){
+
+		if( document.getElementById( 'end-time' ).value == "" ){
+
+			let startTime = new Date( document.getElementById( 'start-time' ).value + "Z");
+			startTime.setHours( startTime.getHours() + 1 );
+			document.getElementById( 'end-time' ).value = startTime.toISOString().slice(0,16);
+		}
+	}
+</script>
 <h1>Host an event for {{ .Group.Name }}</h1>
 <form class="design-1" action="/groups/{{ .Group.IDString }}/schedule" method="POST">
 	<p>First let's define the basic event information.</p>
@@ -8,11 +19,11 @@
 	</div>
 	<div class="input-group required">
 		<label for="start-time">Start Date / Time <i class="fa-xs fa-solid fa-circle-question tooltip" data-fa-transform="up-6" title="The timezone is based on your browser."></i></label>
-		<input name="start-time" type="datetime-local" required>
+		<input id="start-time" name="start-time" type="datetime-local" onchange="copyDate();" required>
 	</div>
 	<div class="input-group required">
 		<label for="end-time">End Date / Time</label>
-		<input name="end-time" type="datetime-local" required>
+		<input id="end-time" name="end-time" type="datetime-local" required>
 	</div>
 	<div class="input-group">
 		<label for="event-summary">Summary <i class="fa-xs fa-solid fa-circle-question tooltip" data-fa-transform="up-6" title="A brief description of your event."></i></label>
