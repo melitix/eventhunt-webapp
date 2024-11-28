@@ -105,11 +105,11 @@ func initVenue(db *pgxpool.Pool) *venue {
 func NewVenue(db *pgxpool.Pool, name, address string, cityID uint64) (*venue, error) {
 
 	// validate inputs
-	errs := validate.Var(name, "required,min=3,max=20")
+	errs := validate.Var(name, "required,min=3,max=26")
 	if errs != nil {
 		return nil, errs
 	}
-	errs = validate.Var(address, "required,min=3,max=20")
+	errs = validate.Var(address, "required,min=3,max=40")
 	if errs != nil {
 		return nil, errs
 	}
