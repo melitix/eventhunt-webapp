@@ -185,8 +185,23 @@ func (a *app) eventsNewPost(w http.ResponseWriter, r *http.Request) {
 
 	name := r.Form.Get("event-name")
 	summary := r.Form.Get("event-summary")
+	timezone := r.Form.Get("timezone")
 
-	startTime, err := time.Parse("2006-01-02T15:04", r.Form.Get("start-time"))
+	loc, err := time.LoadLocation(timezone)
+	if err != nil {
+
+		slog.Error("Timezone is not parsable.", "timezone", timezone)
+		session.AddFlash(framework.Flash{
+			framework.FlashFail,
+			"Timezone was not valid.",
+		})
+
+		session.Save(r, w)
+		http.Redirect(w, r, "/events/new", http.StatusFound)
+		return
+	}
+
+	startTime, err := time.ParseInLocation("2006-01-02T15:04", r.Form.Get("start-time"), loc)
 	if err != nil {
 
 		slog.Error("Start time is not parsable.", "start-time", r.Form.Get("start-time"))
@@ -200,7 +215,7 @@ func (a *app) eventsNewPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	endTime, err := time.Parse("2006-01-02T15:04", r.Form.Get("end-time"))
+	endTime, err := time.ParseInLocation("2006-01-02T15:04", r.Form.Get("end-time"), loc)
 	if err != nil {
 
 		slog.Error("End time is not parsable.", "end-time", r.Form.Get("end-time"))
