@@ -104,25 +104,31 @@ func initVenue(db *pgxpool.Pool) *venue {
  */
 func NewVenue(db *pgxpool.Pool, name, address string, cityID uint64) (*venue, error) {
 
-	// validate inputs
-	errs := validate.Var(name, "required,min=3,max=20")
-	if errs != nil {
-		return nil, errs
-	}
-	errs = validate.Var(address, "required,min=3,max=20")
-	if errs != nil {
-		return nil, errs
-	}
-
 	v := initVenue(db)
+	v.Name = name
+	v.Address = address
+	v.CityID = cityID
 
-	_, err := v.DB.Exec(context.Background(), "INSERT INTO "+v.table()+" (name, address, city_id, web_url, capacity) VALUES ($1, $2, $3, '', 0)",
-		name,
-		address,
-		cityID,
-	)
+	// validate inputs
+	errs := validate.Var(name, "required,min=3,max=26")
+	if errs != nil {
+		return nil, errs
+	}
+	errs = validate.Var(address, "required,min=3,max=40")
+	if errs != nil {
+		return nil, errs
+	}
+
+	q := `INSERT INTO ` + v.table() + ` (name, address, city_id, web_url, capacity) VALUES (@name, @address, @cityID, '', 0) RETURNING *`
+	rows, _ := v.DB.Query(context.Background(), q, pgx.NamedArgs{
+		"name":    v.Name,
+		"address": v.Address,
+		"cityID":  v.CityID,
+	})
+
+	v, err := pgx.CollectExactlyOneRow(rows, pgx.RowToAddrOfStructByName[venue])
 	if err != nil {
-		return nil, fmt.Errorf("Failed save venue to DB. Message: %s", err)
+		return nil, fmt.Errorf("Failed create venue in DB. Err: %s", err)
 	}
 
 	return v, nil
