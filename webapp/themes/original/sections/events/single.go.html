@@ -20,7 +20,7 @@
 			</div>
 			{{ end }}
 			<div class="container">
-				<span><strong>Time:</strong>{{ .Event.StartTime.Format "January 2, 2006 3:04p.m." }} - {{ .Event.EndTime.Format "January 2, 2006 3:04p.m." }}</span><br />
+				<span><strong>Time:</strong>{{ .Event.SmartTime }}</span><br />
 				<span><strong>Place:</strong>{{ with .Event.Venue }}{{ .Name }}{{ else }}<a href="{{ .Event.LocationURL }}">{{ .Event.LocationURL }}</a>{{ end }}</span>
 			</div>
 		</main>
