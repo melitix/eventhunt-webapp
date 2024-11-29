@@ -85,6 +85,25 @@ func (e *Event) Save() error {
 }
 
 /*
+ * Display the event time based on context.
+ */
+func (e *Event) SmartTime() string {
+
+	display := e.StartTime.Format("January 2, 2006 3:04p.m.") + " - "
+	if e.StartTime.Month() != e.EndTime.Month() {
+		display = display + " " + e.EndTime.Format("January")
+	}
+	if e.StartTime.Day() != e.EndTime.Day() {
+		display = display + " " + e.EndTime.Format("2,")
+	}
+	if e.StartTime.Year() != e.EndTime.Year() {
+		display = display + " " + e.EndTime.Format("2006")
+	}
+
+	return display + " " + e.EndTime.Format(" 3:04p.m.")
+}
+
+/*
  * table returns the table name used in the database.
  */
 func (e *Event) table() string { return "events" }
